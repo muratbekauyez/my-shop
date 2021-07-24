@@ -35,13 +35,13 @@ public class AddCartService implements Service {
         Cloth cloth = (Cloth) session.getAttribute(CLOTH);
 
         if (validator.validate(request, response)) {
-            if (sizeDAO.ifClothWithSizeExists(cloth.getId(),clothSizeId) && amount <= sizeDAO.amountOfClothInSize(cloth.getId(),clothSizeId)) {
+            if (sizeDAO.clothSizeExists(cloth.getId(),clothSizeId) && amount <= sizeDAO.amountOfClothInSize(cloth.getId(),clothSizeId)) {
                 Cart cart = new Cart();
                 cart.setUserId(user.getId());
                 cart.setProductId(cloth.getId());
                 cart.setAmount(amount);
                 cart.setSizeId(clothSizeId);
-                if(!cartDAO.ifCartExists(cart)){
+                if(!cartDAO.cartExists(cart)){
                     cartDAO.create(cart);
                     session.setAttribute(USER_CART_CLOTHES, cartDAO.getCartProducts(user.getId()));
                     session.setAttribute(CART_SUM, cartDAO.getSumOfCart(user.getId()));

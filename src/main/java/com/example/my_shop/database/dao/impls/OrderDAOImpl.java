@@ -13,6 +13,12 @@ import java.util.List;
 import java.util.Map;
 
 public class OrderDAOImpl implements OrderDAO {
+    private static final String ADD_ORDER = "INSERT INTO \"Order\" (date, total_price, status_id, user_id) VALUES (?,?,?,?) RETURNING id";
+    private static final String ADD_ORDER_DETAILS = "INSERT INTO \"Order_Details\" (order_id, product_id, size_id, amount, product_price) VALUES (?,?,?,?,?)";
+    private static final String REDUCE_AMOUNT = "UPDATE \"Cloth_Size\" SET amount = ? WHERE cloth_id = ? AND size_id = ?";
+    private static final String GET_USER_ORDERS = "SELECT id, date, total_price, status_id FROM \"Order\" WHERE user_id = ?";
+    private static final String GET_ORDER_DETAILS = "SELECT id,product_id, size_id, amount, product_price FROM \"Order_Details\" WHERE order_id = ?";
+
     private ConnectionPool connectionPool;
     private Connection connection;
     private final SizeDAO sizeDAO = new SizeDAOImpl();
@@ -23,7 +29,6 @@ public class OrderDAOImpl implements OrderDAO {
         Long id = null;
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        String ADD_ORDER = "INSERT INTO \"Order\" (date, total_price, status_id, user_id) VALUES (?,?,?,?) RETURNING id";
         try (PreparedStatement preparedStatement = connection.prepareStatement(ADD_ORDER)) {
             preparedStatement.setDate(1, (Date) order.getDate());
             preparedStatement.setInt(2, order.getTotalPrice());
@@ -43,10 +48,8 @@ public class OrderDAOImpl implements OrderDAO {
     public void addOrderDetails(List<OrderDetails> orderDetailsList) throws SQLException {
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        String ADD_ORDER_DETAILS = "INSERT INTO \"Order_Details\" (order_id, product_id, size_id, amount, product_price) VALUES (?,?,?,?,?)";
-        try {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(ADD_ORDER_DETAILS)) {
             for (OrderDetails orderDetail : orderDetailsList) {
-                PreparedStatement preparedStatement = connection.prepareStatement(ADD_ORDER_DETAILS);
                 preparedStatement.setLong(1, orderDetail.getOrderId());
                 preparedStatement.setLong(2, orderDetail.getProductId());
                 preparedStatement.setLong(3, orderDetail.getSizeId());
@@ -63,11 +66,10 @@ public class OrderDAOImpl implements OrderDAO {
     public void reduceAmountOfClothes(List<OrderDetails> orderDetailsList) throws SQLException {
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        String REDUCE_AMOUNT = "UPDATE \"Cloth_Size\" SET amount = ? WHERE cloth_id = ? AND size_id = ?";
-        try {
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(REDUCE_AMOUNT);) {
             for (OrderDetails orderDetail : orderDetailsList) {
                 int size = sizeDAO.amountOfClothInSize(orderDetail.getProductId(), orderDetail.getSizeId());
-                PreparedStatement preparedStatement = connection.prepareStatement(REDUCE_AMOUNT);
                 preparedStatement.setLong(1, size - orderDetail.getAmount());
                 preparedStatement.setLong(2, orderDetail.getProductId());
                 preparedStatement.setLong(3, orderDetail.getSizeId());
@@ -83,19 +85,20 @@ public class OrderDAOImpl implements OrderDAO {
         List<Order> orders = new ArrayList<>();
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        String GET_USER_ORDERS = "SELECT id, date, total_price, status_id FROM \"Order\" WHERE user_id = ?";
-        PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_ORDERS);
-        preparedStatement.setLong(1,userId);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        while (resultSet.next()){
-            Order order = new Order();
-            order.setId(resultSet.getLong("id"));
-            order.setDate(resultSet.getDate("date"));
-            order.setTotalPrice(resultSet.getInt("total_price"));
-            order.setStatusId(resultSet.getLong("status_id"));
-            orders.add(order);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_ORDERS)) {
+            preparedStatement.setLong(1, userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Order order = new Order();
+                order.setId(resultSet.getLong("id"));
+                order.setDate(resultSet.getDate("date"));
+                order.setTotalPrice(resultSet.getInt("total_price"));
+                order.setStatusId(resultSet.getLong("status_id"));
+                orders.add(order);
+            }
+        }finally {
+            connectionPool.returnConnection(connection);
         }
-        connectionPool.returnConnection(connection);
         return orders;
     }
 
@@ -104,27 +107,28 @@ public class OrderDAOImpl implements OrderDAO {
         List<OrderDetails> orderDetailsList = new ArrayList<>();
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        String GET_ORDER_DETAILS = "SELECT id,product_id, size_id, amount, product_price FROM \"Order_Details\" WHERE order_id = ?";
-        PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDER_DETAILS);
-        preparedStatement.setLong(1,orderId);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        while (resultSet.next()){
-            OrderDetails orderDetails = new OrderDetails();
-            orderDetails.setId(resultSet.getLong("id"));
-            orderDetails.setOrderId(orderId);
-            orderDetails.setProductId(resultSet.getLong("product_id"));
-            orderDetails.setSizeId(resultSet.getLong("size_id"));
-            orderDetails.setAmount(resultSet.getInt("amount"));
-            orderDetails.setProductPrice(resultSet.getInt("product_price"));
 
-            orderDetailsList.add(orderDetails);
+        try(PreparedStatement preparedStatement = connection.prepareStatement(GET_ORDER_DETAILS)){
+            preparedStatement.setLong(1, orderId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                OrderDetails orderDetails = new OrderDetails();
+                orderDetails.setId(resultSet.getLong("id"));
+                orderDetails.setOrderId(orderId);
+                orderDetails.setProductId(resultSet.getLong("product_id"));
+                orderDetails.setSizeId(resultSet.getLong("size_id"));
+                orderDetails.setAmount(resultSet.getInt("amount"));
+                orderDetails.setProductPrice(resultSet.getInt("product_price"));
+                orderDetailsList.add(orderDetails);
+            }
+        }finally {
+            connectionPool.returnConnection(connection);
         }
-        connectionPool.returnConnection(connection);
         return orderDetailsList;
     }
 
-    public String statusName (Long statusId){
-        Map<Long,String> statuses = new HashMap<>();
+    public String statusName(Long statusId) {
+        Map<Long, String> statuses = new HashMap<>();
         statuses.put(1L, "Processing");
         statuses.put(2L, "Обрабатывается");
         statuses.put(3L, "Delivering");

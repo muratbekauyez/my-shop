@@ -9,13 +9,9 @@ import java.util.List;
 public interface ReviewDAO {
     void create(Review review) throws SQLException;
 
-    List<Review> getReviewsOfUser(Long userId) throws SQLException;
-
     Review getClothReviewByUser(Long userId,Long productId) throws SQLException;
 
     List<Review> getClothReviews(Long productId) throws SQLException;
-
-    List<Review> getReviews(Long productId) throws SQLException;
 
     void updateReview (Review review) throws SQLException;
 

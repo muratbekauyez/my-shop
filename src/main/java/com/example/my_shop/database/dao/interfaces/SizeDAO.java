@@ -8,7 +8,7 @@ import java.util.List;
 public interface SizeDAO {
     String getSizeName (Long sizeId) throws SQLException;
 
-    boolean ifClothWithSizeExists(Long clothId, Long sizeId) throws SQLException;
+    boolean clothSizeExists(Long clothId, Long sizeId) throws SQLException;
 
     int amountOfClothInSize(Long clothId, Long sizeId) throws SQLException;
 

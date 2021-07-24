@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface UserDAO {
 
-
     void create (User user) throws SQLException;
 
     void update (User user) throws SQLException;
@@ -22,11 +21,9 @@ public interface UserDAO {
 
     Long getIDByLogin(String username) throws SQLException;
 
-    boolean isUserExist(String username) throws SQLException;
+    boolean userExists(String username) throws SQLException;
 
     User getUserById(Long id) throws SQLException;
-
-//    Long getGenderId(String gender) throws SQLException;
 
 
 

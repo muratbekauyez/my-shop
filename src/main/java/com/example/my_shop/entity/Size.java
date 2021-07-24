@@ -3,8 +3,8 @@ package com.example.my_shop.entity;
 import java.util.Objects;
 
 public class Size {
-    Long id;
-    String sizeName;
+    private Long id;
+    private String sizeName;
 
     public Size(Long id, String sizeName) {
         this.id = id;

@@ -12,45 +12,51 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SizeDAOImpl implements SizeDAO {
+    private static final String GET_SIZE_NAME = "SELECT size_name FROM \"Size\" WHERE id = ?";
+    private static final String CHECK_CLOTH_SIZE = "SELECT * FROM \"Cloth_Size\" WHERE cloth_id = ? AND size_id = ?";
+    private static final String GET_SIZES_OF_CLOTH = "SELECT size_id, amount, S.size_name  FROM \"Cloth_Size\" CS JOIN \"Size\" S on S.id = CS.size_id WHERE CS.cloth_id = ?";
+
+
     private ConnectionPool connectionPool;
     private Connection connection;
 
 
     @Override
     public String getSizeName(Long sizeId) throws SQLException {
+        String sizeName = null;
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        String CHECK_CLOTH_SIZE = "SELECT size_name FROM \"Size\" WHERE id = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(CHECK_CLOTH_SIZE)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_SIZE_NAME)) {
             preparedStatement.setLong(1, sizeId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
-                String sizeName = resultSet.getString("size_name");
-                connectionPool.returnConnection(connection);
-                return sizeName;
+                sizeName = resultSet.getString("size_name");
             }
+        }finally {
+            connectionPool.returnConnection(connection);
         }
-        connectionPool.returnConnection(connection);
-        return null;
+        return sizeName;
     }
 
     @Override
-    public boolean ifClothWithSizeExists(Long clothId, Long sizeId) throws SQLException {
+    public boolean clothSizeExists(Long clothId, Long sizeId) throws SQLException {
+        boolean clothSizeExists = false;
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        String CHECK_CLOTH_SIZE = "SELECT * FROM \"Cloth_Size\" WHERE cloth_id = ? AND size_id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(CHECK_CLOTH_SIZE)) {
             preparedStatement.setLong(1, clothId);
             preparedStatement.setLong(2, sizeId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 int amount = resultSet.getInt("amount");
-                connectionPool.returnConnection(connection);
-                if(amount > 0) return true;
+                if(amount > 0) {
+                    clothSizeExists =  true;
+                }
             }
+        }finally {
+            connectionPool.returnConnection(connection);
         }
-        connectionPool.returnConnection(connection);
-        return false;
+        return clothSizeExists;
     }
 
     @Override
@@ -58,7 +64,6 @@ public class SizeDAOImpl implements SizeDAO {
         int amount = 0;
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        String CHECK_CLOTH_SIZE = "SELECT * FROM \"Cloth_Size\" WHERE cloth_id = ? AND size_id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(CHECK_CLOTH_SIZE)) {
             preparedStatement.setLong(1, clothId);
             preparedStatement.setLong(2, sizeId);
@@ -78,7 +83,6 @@ public class SizeDAOImpl implements SizeDAO {
         List<Size> allSizesOfCloth = new ArrayList<>();
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        String GET_SIZES_OF_CLOTH = "SELECT size_id, amount, S.size_name  FROM \"Cloth_Size\" CS JOIN \"Size\" S on S.id = CS.size_id WHERE CS.cloth_id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(GET_SIZES_OF_CLOTH)) {
             preparedStatement.setLong(1, clothId);
             ResultSet resultSet = preparedStatement.executeQuery();

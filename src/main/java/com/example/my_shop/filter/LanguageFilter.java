@@ -38,11 +38,8 @@ public class LanguageFilter implements Filter {
         language.setId(language_id);
         language.setLanguageName(language_name);
 
-        if (language_id == null && language_name == null) {
-            session.setAttribute(WEB_LANGUAGE,language);
-            session.setAttribute(WEB_LANGUAGE_ID, ENG_LANG_ID);
-            session.setAttribute(WEB_LANGUAGE_NAME, ENGLISH);
-        }else if(language_id.equals(ENG_LANG_ID) && language_name.equals(ENGLISH)){
+
+        if(language_id.equals(ENG_LANG_ID) && language_name.equals(ENGLISH)){
             session.setAttribute(WEB_LANGUAGE,language);
             session.setAttribute(WEB_LANGUAGE_ID, ENG_LANG_ID);
             session.setAttribute(WEB_LANGUAGE_NAME, ENGLISH);
@@ -50,6 +47,10 @@ public class LanguageFilter implements Filter {
             session.setAttribute(WEB_LANGUAGE,language);
             session.setAttribute(WEB_LANGUAGE_ID, RUS_LANG_ID);
             session.setAttribute(WEB_LANGUAGE_NAME, RUSSIAN);
+        } else if (language_id == null && language_name == null) {
+            session.setAttribute(WEB_LANGUAGE,language);
+            session.setAttribute(WEB_LANGUAGE_ID, ENG_LANG_ID);
+            session.setAttribute(WEB_LANGUAGE_NAME, ENGLISH);
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

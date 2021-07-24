@@ -29,7 +29,7 @@ public class AddClothSizeService implements Service {
             Long clothSizeId = Long.parseLong(request.getParameter(CLOTH_SIZE_ID));
             int clothAmount = Integer.parseInt(request.getParameter(CLOTH_AMOUNT));
 
-            if(!sizeDAO.ifClothWithSizeExists(clothId,clothSizeId)){
+            if(!sizeDAO.clothSizeExists(clothId,clothSizeId)){
                 clothDAO.addClothAmount(clothId, clothSizeId, clothAmount);
                 request.setAttribute(CLOTH_SIZE_ADDITION, POSITIVE);
             }else {

@@ -13,6 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClothDetailsDAOImpl implements ClothDetailsDAO {
+    private static final String ADD_CLOTH_DETAILS = "INSERT INTO \"Cloth_Details\" (cloth_id, language_id, name, color, number_of_pockets, season, pattern, about) VALUES (?,?,?,?,?,?,?,?)";
+    private static final String UPDATE_CLOTH_DETAILS = "UPDATE \"Cloth_Details\" SET name = ?, color = ?, number_of_pockets = ?, season = ?, pattern = ?, about = ? WHERE cloth_id = ? AND language_id = ?";
+    private static final String DELETE_CART = "DELETE FROM \"Cloth_Details\" WHERE cloth_id = ? AND language_id = ?";
+    private static final String GET_CLOTH_DETAILS = "SELECT name, color, number_of_pockets, season, pattern, about FROM \"Cloth_Details\" WHERE cloth_id = ? AND language_id = ? ORDER BY cloth_id";
+    private static final String GET_CLOTHES_DETAILS = "SELECT cloth_id, language_id, name, color, number_of_pockets, season, pattern, about FROM \"Cloth_Details\"";
+
     private ConnectionPool connectionPool;
     private Connection connection;
 
@@ -21,8 +27,7 @@ public class ClothDetailsDAOImpl implements ClothDetailsDAO {
     public void create(ClothDetails clothDetails) throws SQLException {
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        String ADD_CLOTH_DETAILS = "INSERT INTO \"Cloth_Details\" (cloth_id, language_id, name, color, number_of_pockets, season, pattern, about) VALUES (?,?,?,?,?,?,?,?)";
-        try(PreparedStatement preparedStatement = connection.prepareStatement(ADD_CLOTH_DETAILS)){
+        try (PreparedStatement preparedStatement = connection.prepareStatement(ADD_CLOTH_DETAILS)) {
             preparedStatement.setLong(1, clothDetails.getId());
             preparedStatement.setLong(2, clothDetails.getLanguageID());
             preparedStatement.setString(3, clothDetails.getName());
@@ -32,7 +37,7 @@ public class ClothDetailsDAOImpl implements ClothDetailsDAO {
             preparedStatement.setString(7, clothDetails.getPattern());
             preparedStatement.setString(8, clothDetails.getAbout());
             preparedStatement.executeUpdate();
-        }finally {
+        } finally {
             connectionPool.returnConnection(connection);
         }
     }
@@ -41,8 +46,7 @@ public class ClothDetailsDAOImpl implements ClothDetailsDAO {
     public void update(ClothDetails clothDetails) throws SQLException {
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        String UPDATE_CLOTH_DETAILS = "UPDATE \"Cloth_Details\" SET name = ?, color = ?, number_of_pockets = ?, season = ?, pattern = ?, about = ? WHERE cloth_id = ? AND language_id = ?";
-        try(PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CLOTH_DETAILS)){
+        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CLOTH_DETAILS)) {
             preparedStatement.setString(1, clothDetails.getName());
             preparedStatement.setString(2, clothDetails.getColor());
             preparedStatement.setInt(3, clothDetails.getNumberOfPockets());
@@ -52,7 +56,7 @@ public class ClothDetailsDAOImpl implements ClothDetailsDAO {
             preparedStatement.setLong(7, clothDetails.getId());
             preparedStatement.setLong(8, clothDetails.getLanguageID());
             preparedStatement.executeUpdate();
-        }finally {
+        } finally {
             connectionPool.returnConnection(connection);
         }
     }
@@ -61,7 +65,6 @@ public class ClothDetailsDAOImpl implements ClothDetailsDAO {
     public void delete(Long clothDetailsId, Long languageId) throws SQLException {
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        String DELETE_CART = "DELETE FROM \"Cloth_Details\" WHERE cloth_id = ? AND language_id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_CART)) {
             preparedStatement.setLong(1, clothDetailsId);
             preparedStatement.setLong(2, languageId);
@@ -75,28 +78,28 @@ public class ClothDetailsDAOImpl implements ClothDetailsDAO {
 
     @Override
     public ClothDetails getClothDetails(Long id, Language language) throws SQLException {
+        ClothDetails clothDetails = new ClothDetails();
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        String GET_CLOTH_DETAILS = "SELECT name, color, number_of_pockets, season, pattern, about FROM \"Cloth_Details\" WHERE cloth_id = ? AND language_id = ? ORDER BY cloth_id";
-        PreparedStatement preparedStatement = connection.prepareStatement(GET_CLOTH_DETAILS);
-        preparedStatement.setLong(1,id);
-        preparedStatement.setLong(2,language.getId());
-        ResultSet resultSet = preparedStatement.executeQuery();
-        while (resultSet.next()){
-            ClothDetails clothDetails = new ClothDetails();
-            clothDetails.setId(id);
-            clothDetails.setLanguageID(language.getId());
-            clothDetails.setName(resultSet.getString("name"));
-            clothDetails.setColor(resultSet.getString("color"));
-            clothDetails.setNumberOfPockets(resultSet.getInt("number_of_pockets"));
-            clothDetails.setSeason(resultSet.getString("season"));
-            clothDetails.setPattern(resultSet.getString("pattern"));
-            clothDetails.setAbout(resultSet.getString("about"));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_CLOTH_DETAILS)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.setLong(2, language.getId());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                clothDetails.setId(id);
+                clothDetails.setLanguageID(language.getId());
+                clothDetails.setName(resultSet.getString("name"));
+                clothDetails.setColor(resultSet.getString("color"));
+                clothDetails.setNumberOfPockets(resultSet.getInt("number_of_pockets"));
+                clothDetails.setSeason(resultSet.getString("season"));
+                clothDetails.setPattern(resultSet.getString("pattern"));
+                clothDetails.setAbout(resultSet.getString("about"));
+            }
+        }finally {
             connectionPool.returnConnection(connection);
-            return clothDetails;
         }
-        connectionPool.returnConnection(connection);
-        return null;
+
+        return clothDetails;
     }
 
     @Override
@@ -104,7 +107,6 @@ public class ClothDetailsDAOImpl implements ClothDetailsDAO {
         List<ClothDetails> allClothDetails = new ArrayList<>();
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        String GET_CLOTHES_DETAILS = "SELECT cloth_id, language_id, name, color, number_of_pockets, season, pattern, about FROM \"Cloth_Details\"";
         try (PreparedStatement preparedStatement = connection.prepareStatement(GET_CLOTHES_DETAILS)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {

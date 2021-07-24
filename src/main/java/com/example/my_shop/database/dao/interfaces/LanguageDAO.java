@@ -6,10 +6,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface LanguageDAO {
-    public List<Language> getAllLanguages() throws SQLException;
+    List<Language> getAllLanguages() throws SQLException;
 
-    public Long getLanguageId(String languageName) throws SQLException;
-
-    public String getLanguageName (Long ID) throws SQLException;
+    String getLanguageName(Long ID) throws SQLException;
 
 }

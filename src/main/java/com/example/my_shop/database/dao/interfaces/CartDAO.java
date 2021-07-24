@@ -14,7 +14,7 @@ public interface CartDAO {
 
     List<Cart> getCartProducts(Long userId) throws SQLException;
 
-    boolean ifCartExists (Cart cart) throws SQLException;
+    boolean cartExists(Cart cart) throws SQLException;
 
     int getSumOfCart(Long userId) throws SQLException;
 

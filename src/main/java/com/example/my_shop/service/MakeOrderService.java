@@ -41,7 +41,7 @@ public class MakeOrderService implements Service {
 
 
         for (Cart cartCloth: userCartClothes) {
-            if(cartCloth.getAmount() > sizeDAO.amountOfClothInSize(cartCloth.getProductId(), cartCloth.getSizeId())){
+            if(cartCloth.getAmount() > sizeDAO.getAmountOfClothInSize(cartCloth.getProductId(), cartCloth.getSizeId())){
                 request.setAttribute(ORDER_COMPLETION, NEGATIVE);
                 request.getRequestDispatcher(PROFILE_PAGE).forward(request,response);
                 return;

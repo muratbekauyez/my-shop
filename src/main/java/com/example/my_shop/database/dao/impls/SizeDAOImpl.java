@@ -60,7 +60,7 @@ public class SizeDAOImpl implements SizeDAO {
     }
 
     @Override
-    public int amountOfClothInSize(Long clothId, Long sizeId) throws SQLException {
+    public int getAmountOfClothInSize(Long clothId, Long sizeId) throws SQLException {
         int amount = 0;
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
@@ -79,7 +79,7 @@ public class SizeDAOImpl implements SizeDAO {
     }
 
     @Override
-    public List<Size> allSizesOfCloth (Long clothId) throws SQLException {
+    public List<Size> getAllSizesOfCloth(Long clothId) throws SQLException {
         List<Size> allSizesOfCloth = new ArrayList<>();
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
@@ -102,7 +102,7 @@ public class SizeDAOImpl implements SizeDAO {
 
 
     @Override
-    public List<Size> allSizes() {
+    public List<Size> getAllSizes() {
         List<Size> allSizes = new ArrayList<>();
         allSizes.add(new Size(1L, "S"));
         allSizes.add(new Size(2L, "M"));

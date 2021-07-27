@@ -21,7 +21,7 @@ public class EditCompanyService implements Service {
     private final Validator validator = new CompanyValidator();
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-        if(validator.validate(request, response)){
+        if(validator.isValid(request, response)){
             Company company = new Company();
             company.setId(Long.parseLong(request.getParameter(COMPANY_ID)));
             company.setCompanyName(request.getParameter(COMPANY_NAME));

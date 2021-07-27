@@ -103,7 +103,7 @@ public class ClothDetailsDAOImpl implements ClothDetailsDAO {
     }
 
     @Override
-    public List<ClothDetails> allClothDetails() throws SQLException {
+    public List<ClothDetails> getAllClothDetails() throws SQLException {
         List<ClothDetails> allClothDetails = new ArrayList<>();
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();

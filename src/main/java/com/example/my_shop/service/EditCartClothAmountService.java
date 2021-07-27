@@ -32,13 +32,13 @@ public class EditCartClothAmountService implements Service {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         HttpSession session = request.getSession(true);
-        if (validator.validate(request, response)) {
+        if (validator.isValid(request, response)) {
             int clothAmount = Integer.parseInt(request.getParameter(CART_AMOUNT));
             Cloth cloth = clothDAO.getCloth(Long.parseLong(request.getParameter(CLOTH_ID)));
             Long sizeId = Long.parseLong(request.getParameter(CLOTH_SIZE_ID));
             User user = (User) session.getAttribute(LOGGED_USER);
 
-            if (clothAmount > 0 && clothAmount <= sizeDAO.amountOfClothInSize(cloth.getId(), sizeId)) {
+            if (clothAmount > 0 && clothAmount <= sizeDAO.getAmountOfClothInSize(cloth.getId(), sizeId)) {
                 Cart cart = new Cart();
                 cart.setUserId(user.getId());
                 cart.setSizeId(sizeId);

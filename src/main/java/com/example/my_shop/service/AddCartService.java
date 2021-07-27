@@ -9,7 +9,6 @@ import com.example.my_shop.entity.Cloth;
 import com.example.my_shop.entity.User;
 import com.example.my_shop.service.init.Service;
 import com.example.my_shop.util.validators.CartValidator;
-import com.example.my_shop.util.validators.Validator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -24,22 +23,23 @@ import static com.example.my_shop.util.constants.ParameterConstants.*;
 public class AddCartService implements Service {
     private final CartDAO cartDAO = new CartDAOImpl();
     private final SizeDAO sizeDAO = new SizeDAOImpl();
-    private final Validator validator = new CartValidator();
+    private final CartValidator validator = new CartValidator();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         HttpSession session = request.getSession(true);
-        int amount = Integer.parseInt(request.getParameter(CART_AMOUNT));
+        int cartAmount = Integer.parseInt(request.getParameter(CART_AMOUNT));
         Long clothSizeId = Long.parseLong(request.getParameter(CLOTH_SIZE_ID));
+
         User user = (User) session.getAttribute(LOGGED_USER);
         Cloth cloth = (Cloth) session.getAttribute(CLOTH);
 
-        if (validator.validate(request, response)) {
-            if (sizeDAO.clothSizeExists(cloth.getId(),clothSizeId) && amount <= sizeDAO.amountOfClothInSize(cloth.getId(),clothSizeId)) {
+        if (validator.isValid(request, response)) {
+            if(validator.isClothAmountValid(cloth.getId(),clothSizeId, cartAmount)) {
                 Cart cart = new Cart();
                 cart.setUserId(user.getId());
                 cart.setProductId(cloth.getId());
-                cart.setAmount(amount);
+                cart.setAmount(cartAmount);
                 cart.setSizeId(clothSizeId);
                 if(!cartDAO.cartExists(cart)){
                     cartDAO.create(cart);
@@ -55,7 +55,6 @@ public class AddCartService implements Service {
         } else {
             request.setAttribute(CART_ADDITION, BIGGER_THAN_ZERO);
         }
-
         request.getRequestDispatcher(CLOTH_PAGE).forward(request, response);
     }
 }

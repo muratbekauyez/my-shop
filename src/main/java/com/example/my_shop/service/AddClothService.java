@@ -25,7 +25,7 @@ public class AddClothService implements Service {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-        if (validator.validate(request, response)) {
+        if (validator.isValid(request, response)) {
             Cloth cloth = new Cloth();
             cloth.setVendorCode(request.getParameter(CLOTH_VENDOR_CODE));
             cloth.setPrice(Integer.parseInt(request.getParameter(PRICE)));

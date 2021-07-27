@@ -8,7 +8,7 @@ import static com.example.my_shop.util.constants.ParameterConstants.USERNAME;
 
 public class LoginValidator implements Validator{
     @Override
-    public boolean validate(HttpServletRequest request, HttpServletResponse response) {
+    public boolean isValid(HttpServletRequest request, HttpServletResponse response) {
         boolean username = request.getParameter(USERNAME) != null && !request.getParameter(USERNAME).equals("");
         boolean password = request.getParameter(PASSWORD) != null && !request.getParameter(PASSWORD).equals("");
         return username && password;

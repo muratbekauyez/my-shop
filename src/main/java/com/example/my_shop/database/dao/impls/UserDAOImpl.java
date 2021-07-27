@@ -3,6 +3,7 @@ package com.example.my_shop.database.dao.impls;
 import com.example.my_shop.database.connection.ConnectionPool;
 import com.example.my_shop.database.dao.interfaces.UserDAO;
 import com.example.my_shop.entity.User;
+import com.example.my_shop.util.constants.ParameterConstants;
 import com.example.my_shop.util.hashing.MD5;
 
 import java.sql.*;
@@ -26,6 +27,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void create(User user) throws SQLException {
+        ParameterConstants parameterConstants = new ParameterConstants();
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(ADD_USER)) {
@@ -36,7 +38,7 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.setDate(5, (Date) user.getBirthDate());
             preparedStatement.setDate(6, Date.valueOf(LocalDate.now()));
             preparedStatement.setLong(7, user.getGenderId());
-            preparedStatement.setLong(8, 2);
+            preparedStatement.setLong(8, parameterConstants.getUserRoleId());
             preparedStatement.executeUpdate();
         } finally {
             connectionPool.returnConnection(connection);
@@ -61,7 +63,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public List<User> allUsers() throws SQLException {
+    public List<User> getAllUsers() throws SQLException {
         List<User> allUsers = new ArrayList<>();
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();

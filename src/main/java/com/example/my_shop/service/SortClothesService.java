@@ -30,7 +30,7 @@ public class SortClothesService implements Service {
             clothList = (List<Cloth>) session.getAttribute(FILTERED_CLOTHES);
 
         }else{
-            clothList = clothDAO.availableClothes();
+            clothList = clothDAO.getAvailableClothes();
         }
 
         clothList = clothFactory.sortClothes(clothList, sortName);

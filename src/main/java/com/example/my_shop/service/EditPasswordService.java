@@ -22,7 +22,7 @@ public class EditPasswordService implements Service {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-        if(request.getParameter(CURRENT_PASSWORD) != null && !request.getParameter(CURRENT_PASSWORD).equals("") && validator.validate(request, response)) {
+        if(request.getParameter(CURRENT_PASSWORD) != null && !request.getParameter(CURRENT_PASSWORD).equals("") && validator.isValid(request, response)) {
             Long id = Long.parseLong(request.getParameter(USER_ID));
             String currentPassword = request.getParameter(CURRENT_PASSWORD);
             String newPassword = request.getParameter(PASSWORD);

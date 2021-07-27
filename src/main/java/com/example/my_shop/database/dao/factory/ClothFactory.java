@@ -40,14 +40,14 @@ public class ClothFactory {
     }
 
 
-    public List<Cloth> sortClothes (java.util.List<com.example.my_shop.entity.Cloth> clothes, String sortName){
+    public List<Cloth> sortClothes (List<Cloth> clothes, String sortName){
         if(clothes.size() == 1)return clothes;
         switch (sortName) {
             case "priceAsc":
                 for (int i = 0; i < clothes.size() - 1; i++) {
                     for (int j = 0; j < clothes.size() - i - 1; j++) {
                         if (clothes.get(j).getPrice() > clothes.get(j + 1).getPrice()) {
-                            com.example.my_shop.entity.Cloth temp = clothes.get(j);
+                            Cloth temp = clothes.get(j);
                             clothes.set(j, clothes.get(j + 1));
                             clothes.set(j + 1, temp);
                         }
@@ -58,7 +58,7 @@ public class ClothFactory {
                 for (int i = 0; i < clothes.size() - 1; i++) {
                     for (int j = 0; j < clothes.size() - i - 1; j++) {
                         if (clothes.get(j).getPrice() < clothes.get(j + 1).getPrice()) {
-                            com.example.my_shop.entity.Cloth temp = clothes.get(j);
+                            Cloth temp = clothes.get(j);
                             clothes.set(j, clothes.get(j + 1));
                             clothes.set(j + 1, temp);
                         }
@@ -69,7 +69,7 @@ public class ClothFactory {
                 for (int i = 0; i < clothes.size() - 1; i++) {
                     for (int j = 0; j < clothes.size() - i - 1; j++) {
                         if (clothes.get(j).getId() < clothes.get(j + 1).getId()) {
-                            com.example.my_shop.entity.Cloth temp = clothes.get(j);
+                            Cloth temp = clothes.get(j);
                             clothes.set(j, clothes.get(j + 1));
                             clothes.set(j + 1, temp);
                         }

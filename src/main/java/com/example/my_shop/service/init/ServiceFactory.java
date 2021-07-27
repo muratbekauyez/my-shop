@@ -40,9 +40,18 @@ public class ServiceFactory {
         SERVICE_MAP.put(EDIT_CLOTH_DETAILS_SERVICE, new EditClothDetailsService());
         SERVICE_MAP.put(DELETE_CLOTH_DETAILS_SERVICE, new DeleteClothDetailsService());
         SERVICE_MAP.put(EDIT_USERS_PASSWORD_SERVICE, new EditUsersPasswordService());
+        SERVICE_MAP.put(ERROR_SERVICE, new ErrorService());
     }
 
     public Service getService(String request) {
-        return SERVICE_MAP.get(request);
+        Service service = SERVICE_MAP.get(ERROR_SERVICE);
+
+        for (Map.Entry<String, Service> mapElement : SERVICE_MAP.entrySet()){
+            if(request.equals(mapElement.getKey())){
+                service = SERVICE_MAP.get(request);
+            }
+        }
+
+        return service;
     }
 }

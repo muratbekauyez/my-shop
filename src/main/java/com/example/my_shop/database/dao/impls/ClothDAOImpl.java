@@ -87,7 +87,7 @@ public class ClothDAOImpl implements ClothDAO {
 
 
     @Override
-    public List<Cloth> allClothes() throws SQLException {
+    public List<Cloth> getAllClothes() throws SQLException {
         List<Cloth> allClothes = new ArrayList<>();
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
@@ -111,7 +111,7 @@ public class ClothDAOImpl implements ClothDAO {
     }
 
     @Override
-    public List<Cloth> availableClothes() throws SQLException {
+    public List<Cloth> getAvailableClothes() throws SQLException {
         List<Cloth> availableClothes = new ArrayList<>();
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();

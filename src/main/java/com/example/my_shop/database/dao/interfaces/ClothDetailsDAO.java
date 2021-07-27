@@ -16,6 +16,6 @@ public interface ClothDetailsDAO {
 
     ClothDetails getClothDetails(Long id, Language language) throws SQLException;
 
-    List<ClothDetails> allClothDetails() throws SQLException;
+    List<ClothDetails> getAllClothDetails() throws SQLException;
 
 }

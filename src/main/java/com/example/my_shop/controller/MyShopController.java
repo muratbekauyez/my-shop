@@ -31,6 +31,7 @@ public class MyShopController extends HttpServlet {
 
     protected void doService(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         service = serviceFactory.getService(request.getRequestURI());
+
         try {
             service.execute(request, response);
         } catch (SQLException sqlException) {

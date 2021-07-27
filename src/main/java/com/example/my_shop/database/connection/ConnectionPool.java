@@ -2,6 +2,7 @@ package com.example.my_shop.database.connection;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -89,6 +90,7 @@ public final class ConnectionPool {
 
         return connection;
     }
+
 
     public synchronized void returnConnection(Connection connection) {
         if ((connection != null) && (connectionQueue.size() <= POOL_SIZE)) {

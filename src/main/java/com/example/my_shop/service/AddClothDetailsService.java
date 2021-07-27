@@ -22,7 +22,7 @@ public class AddClothDetailsService implements Service {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-        if (validator.validate(request, response)) {
+        if (validator.isValid(request, response)) {
             ClothDetails clothDetails = new ClothDetails();
             clothDetails.setId(Long.parseLong(request.getParameter(CLOTH_ID)));
             clothDetails.setLanguageID(Long.parseLong(request.getParameter(CLOTH_LANGUAGE_ID)));

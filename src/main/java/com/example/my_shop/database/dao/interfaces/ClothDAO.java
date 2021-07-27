@@ -14,13 +14,13 @@ public interface ClothDAO {
 
     Cloth getCloth(Long id) throws SQLException;
 
-    List<Cloth> allClothes() throws SQLException, IOException;
+    List<Cloth> getAllClothes() throws SQLException, IOException;
 
     void addClothAmount(Long clothId, Long sizeId, int amount) throws SQLException;
 
     List<Cloth> filterClothes(String[] sizeIds,String[] companyIds)throws SQLException;
 
-    List<Cloth> availableClothes() throws SQLException;
+    List<Cloth> getAvailableClothes() throws SQLException;
 
     void setAmountToZero(Long id) throws SQLException;
 

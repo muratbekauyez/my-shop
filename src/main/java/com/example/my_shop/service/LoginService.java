@@ -31,7 +31,7 @@ public class LoginService implements Service {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         HttpSession session = request.getSession(true);
-        if (validator.validate(request, response)) {
+        if (validator.isValid(request, response)) {
             User user = userDAO.getUserByLoginAndPassword(request.getParameter(USERNAME), request.getParameter(PASSWORD));
             if (user != null) {
                 session.setAttribute(LOGGED_USER, user);

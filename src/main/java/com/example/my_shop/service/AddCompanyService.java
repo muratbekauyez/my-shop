@@ -23,7 +23,7 @@ public class AddCompanyService implements Service {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-        if(validator.validate(request, response)){
+        if(validator.isValid(request, response)){
             Company company = new Company();
             company.setCompanyName(request.getParameter(COMPANY_NAME));
             company.setCountry(request.getParameter(COMPANY_COUNTRY));

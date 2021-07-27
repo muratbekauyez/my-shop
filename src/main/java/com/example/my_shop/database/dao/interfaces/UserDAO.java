@@ -11,7 +11,7 @@ public interface UserDAO {
 
     void update (User user) throws SQLException;
 
-    List<User> allUsers() throws SQLException;
+    List<User> getAllUsers() throws SQLException;
 
     void updatePassword (Long id, String newPassword) throws SQLException;
 
@@ -24,6 +24,7 @@ public interface UserDAO {
     boolean userExists(String username) throws SQLException;
 
     User getUserById(Long id) throws SQLException;
+
 
 
 

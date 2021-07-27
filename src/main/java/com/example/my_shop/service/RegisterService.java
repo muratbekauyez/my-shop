@@ -28,7 +28,7 @@ public class RegisterService implements Service {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         HttpSession session = request.getSession(true);
-        if (validator.validate(request, response)) {
+        if (validator.isValid(request, response)) {
             if (!userDAO.userExists(request.getParameter(USERNAME))) {
                 if (request.getParameter(PASSWORD).equals(request.getParameter(RETYPE_PASSWORD))) {
                     User user = new User();

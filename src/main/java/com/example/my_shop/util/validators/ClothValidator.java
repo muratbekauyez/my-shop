@@ -7,7 +7,7 @@ import static com.example.my_shop.util.constants.ParameterConstants.*;
 
 public class ClothValidator implements Validator{
     @Override
-    public boolean validate(HttpServletRequest request, HttpServletResponse response) {
+    public boolean isValid(HttpServletRequest request, HttpServletResponse response) {
         boolean vendorCode = request.getParameter(CLOTH_VENDOR_CODE) != null && !request.getParameter(CLOTH_VENDOR_CODE).equals("");
         boolean price = request.getParameter(PRICE) != null && !request.getParameter(PRICE).equals("");
         boolean companyId = request.getParameter(COMPANY_ID) != null && !request.getParameter(COMPANY_ID).equals("");

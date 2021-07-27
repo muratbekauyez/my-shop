@@ -24,7 +24,7 @@ public class AddClothSizeService implements Service {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-        if(validator.validate(request, response)){
+        if(validator.isValid(request, response)){
             Long clothId  = Long.parseLong(request.getParameter(CLOTH_ID));
             Long clothSizeId = Long.parseLong(request.getParameter(CLOTH_SIZE_ID));
             int clothAmount = Integer.parseInt(request.getParameter(CLOTH_AMOUNT));

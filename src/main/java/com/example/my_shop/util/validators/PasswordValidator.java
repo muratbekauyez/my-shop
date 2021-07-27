@@ -7,7 +7,7 @@ import static com.example.my_shop.util.constants.ParameterConstants.*;
 
 public class PasswordValidator implements Validator{
     @Override
-    public boolean validate(HttpServletRequest request, HttpServletResponse response) {
+    public boolean isValid(HttpServletRequest request, HttpServletResponse response) {
         boolean newPassword = request.getParameter(PASSWORD) != null && !request.getParameter(PASSWORD).equals("");
         boolean rePassword = request.getParameter(RETYPE_PASSWORD) != null && !request.getParameter(RETYPE_PASSWORD).equals("");
 

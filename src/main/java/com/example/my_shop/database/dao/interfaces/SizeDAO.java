@@ -10,10 +10,10 @@ public interface SizeDAO {
 
     boolean clothSizeExists(Long clothId, Long sizeId) throws SQLException;
 
-    int amountOfClothInSize(Long clothId, Long sizeId) throws SQLException;
+    int getAmountOfClothInSize(Long clothId, Long sizeId) throws SQLException;
 
-    List<Size> allSizesOfCloth (Long clothId) throws SQLException;
+    List<Size> getAllSizesOfCloth(Long clothId) throws SQLException;
 
-    List<Size> allSizes();
+    List<Size> getAllSizes();
 
 }

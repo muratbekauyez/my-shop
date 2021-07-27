@@ -5,5 +5,5 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface Validator {
 
-    boolean validate(HttpServletRequest request, HttpServletResponse response);
+    boolean isValid(HttpServletRequest request, HttpServletResponse response);
 }

@@ -44,7 +44,7 @@
                         <h2 class="display-3"><fmt:message key="shop.filterClothes"/> </h2>
                     </div>
                     <div class="form-group">
-                        <c:forEach var="size" items="${sizeDao.allSizes()}">
+                        <c:forEach var="size" items="${sizeDao.allSizes}">
                             <input type="checkbox" name="clothSizeId" value="${size.id}">${size.sizeName}
                         </c:forEach>
                     </div>
@@ -98,7 +98,6 @@
                                 <!-- Product name-->
                                 <h5 class="fw-bolder">${cloth.vendorCode}</h5>
                                 <!-- Product price-->
-                                    <%--                                <span class="text-muted text-decoration-line-through">$20.00</span>--%>
                                 ₸${cloth.price}
                             </div>
                         </div>
@@ -118,7 +117,7 @@
         </c:if>
 
         <c:if test="${(requestScope.filterApplied == 'no') or (requestScope.filterApplied == null)}">
-            <c:forEach var="cloth" items="${clothDao.availableClothes()}">
+            <c:forEach var="cloth" items="${clothDao.availableClothes}">
                 <div class="col mb-5">
                     <div class="card h-100">
                         <!-- Product image-->
@@ -131,7 +130,6 @@
                                 <!-- Product name-->
                                 <h5 class="fw-bolder">${cloth.vendorCode}</h5>
                                 <!-- Product price-->
-                                    <%--                                <span class="text-muted text-decoration-line-through">$20.00</span>--%>
                                 ₸${cloth.price}
                             </div>
                         </div>

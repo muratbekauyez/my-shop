@@ -22,7 +22,7 @@ public class EditUsersPasswordService implements Service {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-        if(validator.validate(request, response)) {
+        if(validator.isValid(request, response)) {
             Long id = Long.parseLong(request.getParameter(USER_ID));
             String newPassword = request.getParameter(PASSWORD);
             String rePassword = request.getParameter(RETYPE_PASSWORD);

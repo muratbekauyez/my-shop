@@ -24,7 +24,7 @@ public class EditProfileService implements Service {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         HttpSession session = request.getSession(true);
-        if(validator.validate(request, response)) {
+        if(validator.isValid(request, response)) {
             User user = new User();
             user.setId(Long.parseLong(request.getParameter(USER_ID)));
             user.setFirstName(request.getParameter(FIRST_NAME));

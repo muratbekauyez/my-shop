@@ -34,7 +34,7 @@ public class FilterClothesService implements Service {
         }else if(companyIds != null){
             clothes = clothDAO.filterClothes(new String[]{},companyIds);
         }else{
-            clothes = clothDAO.availableClothes();
+            clothes = clothDAO.getAvailableClothes();
             session.setAttribute(FILTERED_CLOTHES, clothes);
             request.setAttribute(ARE_FILTERS_APPLIED, NEGATIVE);
             request.getRequestDispatcher(FEED_PAGE).forward(request, response);

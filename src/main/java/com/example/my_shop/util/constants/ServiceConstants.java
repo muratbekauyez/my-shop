@@ -27,4 +27,5 @@ public class ServiceConstants {
     public static final String EDIT_CLOTH_DETAILS_SERVICE = "/EditClothDetails";
     public static final String DELETE_CLOTH_DETAILS_SERVICE = "/DeleteClothDetails";
     public static final String EDIT_USERS_PASSWORD_SERVICE = "/EditUsersPassword";
+    public static final String ERROR_SERVICE = "/Error";
 }

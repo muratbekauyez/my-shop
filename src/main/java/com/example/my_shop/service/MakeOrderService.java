@@ -69,7 +69,7 @@ public class MakeOrderService implements Service {
 
         orderDAO.addOrderDetails(orderDetailsList);
         orderDAO.reduceAmountOfClothes(orderDetailsList);
-        cartDAO.deleteAllProductsFromCart(user.getId());
+        cartDAO.deleteAllUserProducts(user.getId());
 
         session.setAttribute(USER_CART_CLOTHES, null);
         session.setAttribute(CART_SUM, null);

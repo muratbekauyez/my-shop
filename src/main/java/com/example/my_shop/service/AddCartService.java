@@ -25,11 +25,19 @@ public class AddCartService implements Service {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         HttpSession session = request.getSession(true);
+
+        if(!(validator.isClothSizeParameterValid(request.getParameter(CLOTH_SIZE_ID))  && validator.isQuantityParameterValid(request.getParameter(CART_AMOUNT)))){
+            request.setAttribute(CART_ADDITION, WRONG_CREDENTIALS);
+            request.getRequestDispatcher(CLOTH_PAGE).forward(request, response);
+            return;
+        }
+
         int cartAmount = Integer.parseInt(request.getParameter(CART_AMOUNT));
         Long clothSizeId = Long.parseLong(request.getParameter(CLOTH_SIZE_ID));
 
         User user = (User) session.getAttribute(LOGGED_USER);
         Cloth cloth = (Cloth) session.getAttribute(CLOTH);
+
 
         if(!validator.isValid(request, response)){
             request.setAttribute(CART_ADDITION, BIGGER_THAN_ZERO);
@@ -41,7 +49,8 @@ public class AddCartService implements Service {
             cart.setProductId(cloth.getId());
             cart.setAmount(cartAmount);
             cart.setSizeId(clothSizeId);
-            if(cartDAO.cartExists(cart)){
+            System.out.println(cart);
+            if(cartDAO.isProductAlreadyInCart(cart)){
                 request.setAttribute(CART_ADDITION, ALREADY_IN_CART);
             }else{
                 cartDAO.create(cart);
@@ -50,7 +59,6 @@ public class AddCartService implements Service {
                 request.setAttribute(CART_ADDITION, POSITIVE);
             }
         }
-
         request.getRequestDispatcher(CLOTH_PAGE).forward(request, response);
     }
 }

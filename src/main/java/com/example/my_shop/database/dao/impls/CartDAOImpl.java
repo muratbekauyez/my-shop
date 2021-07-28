@@ -12,10 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CartDAOImpl implements CartDAO {
-    private static final String ADD_CART = "INSERT INTO \"Cart\" (user_id, product_id, amount, size_id) VALUES (?,?,?,?)";
-    private static final String UPDATE_CART = "UPDATE \"Cart\" SET amount = ? WHERE user_id = ? AND product_id = ?";
-    private static final String DELETE_CART = "DELETE FROM \"Cart\" WHERE user_id = ? AND product_id = ?";
-    private static final String GET_CARTS = "SELECT id, product_id, amount, size_id FROM \"Cart\" WHERE user_id = ?";
+    private static final String ADD_PRODUCT = "INSERT INTO \"Cart\" (user_id, product_id, amount, size_id) VALUES (?,?,?,?)";
+    private static final String UPDATE_PRODUCT = "UPDATE \"Cart\" SET amount = ? WHERE user_id = ? AND product_id = ?";
+    private static final String DELETE_PRODUCT = "DELETE FROM \"Cart\" WHERE user_id = ? AND product_id = ?";
+    private static final String DELETE_USER_PRODUCTS = "DELETE FROM \"Cart\" WHERE user_id = ?";
+    private static final String GET_USER_PRODUCTS = "SELECT id, product_id, amount, size_id FROM \"Cart\" WHERE user_id = ?";
+    private static final String GET_USER_PRODUCT = "SELECT id, amount FROM \"Cart\" WHERE user_id = ? AND product_id = ? AND size_id = ?";
     private static final String GET_SUM_CART = "SELECT sum(price * \"Cart\".amount) FROM \"Cart\" JOIN \"Clothes\" C on C.id = \"Cart\".product_id WHERE user_id = ?";
 
     private ConnectionPool connectionPool;
@@ -25,7 +27,7 @@ public class CartDAOImpl implements CartDAO {
     public void create(Cart cart) throws SQLException {
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(ADD_CART)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(ADD_PRODUCT)) {
             preparedStatement.setLong(1, cart.getUserId());
             preparedStatement.setLong(2, cart.getProductId());
             preparedStatement.setInt(3, cart.getAmount());
@@ -40,7 +42,7 @@ public class CartDAOImpl implements CartDAO {
     public void updateAmount(Cart cart) throws SQLException {
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CART)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_PRODUCT)) {
             preparedStatement.setInt(1, cart.getAmount());
             preparedStatement.setLong(2, cart.getUserId());
             preparedStatement.setLong(3, cart.getProductId());
@@ -54,7 +56,7 @@ public class CartDAOImpl implements CartDAO {
     public void delete(Cart cart) throws SQLException {
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_CART)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_PRODUCT)) {
             preparedStatement.setLong(1, cart.getUserId());
             preparedStatement.setLong(2, cart.getProductId());
             preparedStatement.executeUpdate();
@@ -64,10 +66,10 @@ public class CartDAOImpl implements CartDAO {
     }
 
     @Override
-    public void deleteAllProductsFromCart(Long userId) throws SQLException {
+    public void deleteAllUserProducts(Long userId) throws SQLException {
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_CART)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER_PRODUCTS)) {
             preparedStatement.setLong(1, userId);
             preparedStatement.executeUpdate();
         } finally {
@@ -80,7 +82,7 @@ public class CartDAOImpl implements CartDAO {
         List<Cart> cartsOfUser = new ArrayList<>();
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_CARTS)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_PRODUCTS)) {
             preparedStatement.setLong(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -100,11 +102,11 @@ public class CartDAOImpl implements CartDAO {
 
 
     @Override
-    public boolean cartExists(Cart cart) throws SQLException {
+    public boolean isProductAlreadyInCart(Cart cart) throws SQLException {
         boolean cartExists = false;
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_CARTS)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_PRODUCT)) {
             preparedStatement.setLong(1, cart.getUserId());
             preparedStatement.setLong(2, cart.getProductId());
             preparedStatement.setLong(3, cart.getSizeId());

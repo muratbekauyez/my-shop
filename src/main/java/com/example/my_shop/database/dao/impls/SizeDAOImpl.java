@@ -60,7 +60,7 @@ public class SizeDAOImpl implements SizeDAO {
     }
 
     @Override
-    public int getAmountOfClothInSize(Long clothId, Long sizeId) throws SQLException {
+    public int getClothAmount(Long clothId, Long sizeId) throws SQLException {
         int amount = 0;
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();

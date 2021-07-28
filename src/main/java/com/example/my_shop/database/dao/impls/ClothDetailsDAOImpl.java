@@ -15,7 +15,7 @@ import java.util.List;
 public class ClothDetailsDAOImpl implements ClothDetailsDAO {
     private static final String ADD_CLOTH_DETAILS = "INSERT INTO \"Cloth_Details\" (cloth_id, language_id, name, color, number_of_pockets, season, pattern, about) VALUES (?,?,?,?,?,?,?,?)";
     private static final String UPDATE_CLOTH_DETAILS = "UPDATE \"Cloth_Details\" SET name = ?, color = ?, number_of_pockets = ?, season = ?, pattern = ?, about = ? WHERE cloth_id = ? AND language_id = ?";
-    private static final String DELETE_CART = "DELETE FROM \"Cloth_Details\" WHERE cloth_id = ? AND language_id = ?";
+    private static final String DELETE_CLOTH_DETAILS = "DELETE FROM \"Cloth_Details\" WHERE cloth_id = ? AND language_id = ?";
     private static final String GET_CLOTH_DETAILS = "SELECT name, color, number_of_pockets, season, pattern, about FROM \"Cloth_Details\" WHERE cloth_id = ? AND language_id = ? ORDER BY cloth_id";
     private static final String GET_CLOTHES_DETAILS = "SELECT cloth_id, language_id, name, color, number_of_pockets, season, pattern, about FROM \"Cloth_Details\"";
 
@@ -65,7 +65,7 @@ public class ClothDetailsDAOImpl implements ClothDetailsDAO {
     public void delete(Long clothDetailsId, Long languageId) throws SQLException {
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_CART)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_CLOTH_DETAILS)) {
             preparedStatement.setLong(1, clothDetailsId);
             preparedStatement.setLong(2, languageId);
             preparedStatement.executeUpdate();
@@ -103,7 +103,6 @@ public class ClothDetailsDAOImpl implements ClothDetailsDAO {
         return clothDetails;
     }
 
-    @Override
     public List<ClothDetails> getAllClothDetails() throws SQLException {
         List<ClothDetails> allClothDetails = new ArrayList<>();
         connectionPool = ConnectionPool.getInstance();

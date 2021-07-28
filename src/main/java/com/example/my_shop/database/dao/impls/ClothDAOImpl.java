@@ -15,7 +15,7 @@ public class ClothDAOImpl implements ClothDAO {
     private static final String GET_CLOTHES = "SELECT id,vendor_code, company_id, price, image, gender_id FROM \"Clothes\" ORDER BY id";
     private static final String GET_AVAILABLE_CLOTHES = "SELECT DISTINCT id, vendor_code, image, price, company_id, gender_id FROM \"Clothes\" C JOIN \"Cloth_Size\" CS on C.id = CS.cloth_id WHERE amount > 0 ";
     private static final String ADD_CLOTH_SIZE = "INSERT INTO \"Cloth_Size\" (cloth_id, size_id, amount) VALUES (?,?,?)";
-    private static final String SET_AMOUNT_CLOTH_SIZE = "UPDATE \"Cloth_Size\" SET amount = 0 WHERE cloth_id=?";
+    private static final String SET_0_CLOTH_SIZE = "UPDATE \"Cloth_Size\" SET amount = 0 WHERE cloth_id=?";
 
 
     private ConnectionPool connectionPool;
@@ -184,7 +184,7 @@ public class ClothDAOImpl implements ClothDAO {
     public void setAmountToZero(Long id) throws SQLException {
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SET_AMOUNT_CLOTH_SIZE)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SET_0_CLOTH_SIZE)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         }

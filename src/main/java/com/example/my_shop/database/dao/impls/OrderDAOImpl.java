@@ -67,9 +67,9 @@ public class OrderDAOImpl implements OrderDAO {
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(REDUCE_AMOUNT);) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(REDUCE_AMOUNT)) {
             for (OrderDetails orderDetail : orderDetailsList) {
-                int size = sizeDAO.getAmountOfClothInSize(orderDetail.getProductId(), orderDetail.getSizeId());
+                int size = sizeDAO.getClothAmount(orderDetail.getProductId(), orderDetail.getSizeId());
                 preparedStatement.setLong(1, size - orderDetail.getAmount());
                 preparedStatement.setLong(2, orderDetail.getProductId());
                 preparedStatement.setLong(3, orderDetail.getSizeId());

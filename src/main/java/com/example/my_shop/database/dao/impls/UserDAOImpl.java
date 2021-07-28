@@ -62,7 +62,7 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
-    @Override
+
     public List<User> getAllUsers() throws SQLException {
         List<User> allUsers = new ArrayList<>();
         connectionPool = ConnectionPool.getInstance();

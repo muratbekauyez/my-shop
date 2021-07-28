@@ -38,7 +38,7 @@ public class EditCartClothAmountService implements Service {
             Long sizeId = Long.parseLong(request.getParameter(CLOTH_SIZE_ID));
             User user = (User) session.getAttribute(LOGGED_USER);
 
-            if (clothAmount > 0 && clothAmount <= sizeDAO.getAmountOfClothInSize(cloth.getId(), sizeId)) {
+            if (clothAmount > 0 && clothAmount <= sizeDAO.getClothAmount(cloth.getId(), sizeId)) {
                 Cart cart = new Cart();
                 cart.setUserId(user.getId());
                 cart.setSizeId(sizeId);

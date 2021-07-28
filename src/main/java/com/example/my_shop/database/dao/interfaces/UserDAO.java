@@ -3,15 +3,12 @@ package com.example.my_shop.database.dao.interfaces;
 import com.example.my_shop.entity.User;
 
 import java.sql.SQLException;
-import java.util.List;
 
 public interface UserDAO {
 
     void create (User user) throws SQLException;
 
     void update (User user) throws SQLException;
-
-    List<User> getAllUsers() throws SQLException;
 
     void updatePassword (Long id, String newPassword) throws SQLException;
 

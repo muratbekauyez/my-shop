@@ -22,7 +22,7 @@ public class CartValidator implements Validator {
 
     public boolean isClothAmountValid(Long clothId, Long sizeId, int cartAmount) throws SQLException {
         boolean clothSizeExists = sizeDAO.clothSizeExists(clothId, sizeId);
-        boolean isClothAmountEnough = cartAmount <= sizeDAO.getAmountOfClothInSize(clothId, sizeId);
+        boolean isClothAmountEnough = cartAmount <= sizeDAO.getClothAmount(clothId, sizeId);
 
         return clothSizeExists && isClothAmountEnough;
     }

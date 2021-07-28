@@ -5,7 +5,6 @@ import com.example.my_shop.entity.ClothDetails;
 import com.example.my_shop.entity.Language;
 
 import java.sql.SQLException;
-import java.util.List;
 
 public interface ClothDetailsDAO {
     void create(ClothDetails clothDetails) throws SQLException;
@@ -16,6 +15,5 @@ public interface ClothDetailsDAO {
 
     ClothDetails getClothDetails(Long id, Language language) throws SQLException;
 
-    List<ClothDetails> getAllClothDetails() throws SQLException;
 
 }

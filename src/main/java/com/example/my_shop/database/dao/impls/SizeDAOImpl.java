@@ -70,11 +70,10 @@ public class SizeDAOImpl implements SizeDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 amount = resultSet.getInt("amount");
-                connectionPool.returnConnection(connection);
-                return amount;
             }
+        }finally {
+            connectionPool.returnConnection(connection);
         }
-        connectionPool.returnConnection(connection);
         return amount;
     }
 

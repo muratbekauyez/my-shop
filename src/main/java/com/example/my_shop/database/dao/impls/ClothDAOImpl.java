@@ -61,14 +61,15 @@ public class ClothDAOImpl implements ClothDAO {
 
     @Override
     public Cloth getCloth(Long id) throws SQLException {
-        Cloth cloth = new Cloth();
+        Cloth cloth = null;
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(GET_CLOTH)) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
+            while (resultSet.next()) {
+                cloth = new Cloth();
                 cloth.setId(id);
                 cloth.setVendorCode(resultSet.getString("vendor_code"));
                 cloth.setPrice(resultSet.getInt("price"));

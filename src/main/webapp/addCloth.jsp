@@ -97,7 +97,7 @@
                 <div class="form-group">
                     <label><fmt:message key="addCloth.selectCloth"/></label>
                     <select class="form-control" name="clothId" required>
-                        <c:forEach var="cloth" items="${ClothDao.allClothes()}">
+                        <c:forEach var="cloth" items="${ClothDao.allClothes}">
                             <option value="${cloth.id}">${cloth.vendorCode}</option>
                         </c:forEach>
                     </select>
@@ -106,7 +106,7 @@
                 <div class="form-group">
                     <label>Cloth Size</label>
                     <select class="form-control" name="clothSizeId" required>
-                        <c:forEach var="clothSize" items="${SizeDao.allSizes()}">
+                        <c:forEach var="clothSize" items="${SizeDao.allSizes}">
                             <option value="${clothSize.id}">${clothSize.sizeName}</option>
                         </c:forEach>
                     </select>
@@ -134,7 +134,7 @@
                 <div class="form-group">
                     <label><fmt:message key="addCloth.selectCloth"/></label>
                     <select class="form-control" name="clothId" required>
-                        <c:forEach var="cloth" items="${ClothDao.allClothes()}">
+                        <c:forEach var="cloth" items="${ClothDao.allClothes}">
                             <option value="${cloth.id}">${cloth.vendorCode}</option>
                         </c:forEach>
                     </select>

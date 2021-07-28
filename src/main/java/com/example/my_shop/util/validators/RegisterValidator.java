@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 import static com.example.my_shop.util.constants.ParameterConstants.*;
 
 public class RegisterValidator implements Validator{
+    private static final String USERNAME_REGEX = "^[a-zA-Z0-9._\\-]{3,}$";
+
     @Override
     public boolean isValid(HttpServletRequest request, HttpServletResponse response)  {
         boolean username = request.getParameter(USERNAME) != null && !request.getParameter(USERNAME).equals("");
@@ -18,4 +20,10 @@ public class RegisterValidator implements Validator{
 
         return  username && password && rePassword && firstName && lastName && birthDate && gender;
     }
+
+    public boolean isUsernameValid(String login){
+        return login.matches(USERNAME_REGEX);
+    }
+
+
 }

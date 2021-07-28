@@ -39,7 +39,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach var="cloth" items="${clothDao.allClothes()}">
+                            <c:forEach var="cloth" items="${clothDao.allClothes}">
                                 <tr>
                                     <form action="EditClothes" method="POST" enctype="multipart/form-data">
                                         <td>${cloth.vendorCode}<br><input type="text" name="vendorCode" required>
@@ -120,7 +120,7 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="cloth" items="${clothDetailsDao.allClothDetails()}">
+        <c:forEach var="cloth" items="${clothDetailsDao.allClothDetails}">
             <tr>
                 <form action="EditClothDetails" method="POST" enctype="multipart/form-data">
                     <td>${clothDao.getCloth(cloth.id).vendorCode}</td>

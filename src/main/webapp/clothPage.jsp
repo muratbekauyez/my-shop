@@ -53,7 +53,7 @@
                             <div class="form-group">
                                 <span class="posted_in"> <strong><fmt:message key="clothPage.size"/></strong>
                                     <select class="form-control" name="clothSizeId" required>
-                                        <c:forEach var="clothSize" items="${sizeDao.allSizesOfCloth(sessionScope.cloth.id)}">
+                                        <c:forEach var="clothSize" items="${sizeDao.getAllSizesOfCloth(sessionScope.cloth.id)}">
                                             <option value="${clothSize.id}">${clothSize.sizeName}</option>
                                         </c:forEach>
                                     </select>

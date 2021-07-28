@@ -158,7 +158,7 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User getUserByLoginAndPassword(String username, String password) throws SQLException {
-        User user = new User();
+        User user = null;
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_USERNAME_AND_PASSWORD)) {
@@ -166,6 +166,7 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.setString(2, MD5.getMd5(password));
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
+                user = new User();
                 user.setId(getIDByLogin(username));
                 user.setUsername(resultSet.getString("username"));
                 user.setFirstName(resultSet.getString("first_name"));

@@ -27,7 +27,7 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="user" items="${userDao.allUsers()}">
+        <c:forEach var="user" items="${userDao.allUsers}">
             <tr>
                 <form action="EditUsersPassword" method="POST" enctype="multipart/form-data">
                     <td>${user.username}</td>
@@ -65,7 +65,7 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="user" items="${userDao.allUsers()}">
+        <c:forEach var="user" items="${userDao.allUsers}">
             <tr>
                 <form action="EditProfile" method="POST" enctype="multipart/form-data">
                     <td>${user.username}</td>

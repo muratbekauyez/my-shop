@@ -31,22 +31,22 @@ public class LoginService implements Service {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         HttpSession session = request.getSession(true);
-        if (validator.isValid(request, response)) {
-            User user = userDAO.getUserByLoginAndPassword(request.getParameter(USERNAME), request.getParameter(PASSWORD));
-            if (user != null) {
-                session.setAttribute(LOGGED_USER, user);
-                session.setAttribute(USER_CART_CLOTHES, cartDAO.getCartProducts(user.getId()));
-                session.setAttribute(CART_SUM, cartDAO.getSumOfCart(user.getId()));
-                session.setAttribute(USER_ORDERS, orderDAO.getUserOrders(user.getId()));
-                request.getRequestDispatcher(PROFILE_PAGE).forward(request, response);
-            } else {
-                request.setAttribute(ERROR_LOGIN, WRONG_CREDENTIALS);
-                request.getRequestDispatcher(LOGIN_PAGE).forward(request, response);
-            }
 
-        } else {
+        User user = userDAO.getUserByLoginAndPassword(request.getParameter(USERNAME), request.getParameter(PASSWORD));
+        if(!validator.isValid(request, response)){
             request.setAttribute(ERROR_LOGIN, FILL_ALL_FIELDS);
             request.getRequestDispatcher(LOGIN_PAGE).forward(request, response);
+
+        }else if(user == null){
+            request.setAttribute(ERROR_LOGIN, WRONG_CREDENTIALS);
+            request.getRequestDispatcher(LOGIN_PAGE).forward(request, response);
+
+        }else{
+            session.setAttribute(LOGGED_USER, user);
+            session.setAttribute(USER_CART_CLOTHES, cartDAO.getCartProducts(user.getId()));
+            session.setAttribute(CART_SUM, cartDAO.getSumOfCart(user.getId()));
+            session.setAttribute(USER_ORDERS, orderDAO.getUserOrders(user.getId()));
+            request.getRequestDispatcher(PROFILE_PAGE).forward(request, response);
         }
     }
 }

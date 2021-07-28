@@ -78,7 +78,7 @@ public class ClothDetailsDAOImpl implements ClothDetailsDAO {
 
     @Override
     public ClothDetails getClothDetails(Long id, Language language) throws SQLException {
-        ClothDetails clothDetails = new ClothDetails();
+        ClothDetails clothDetails = null;
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(GET_CLOTH_DETAILS)) {
@@ -86,6 +86,7 @@ public class ClothDetailsDAOImpl implements ClothDetailsDAO {
             preparedStatement.setLong(2, language.getId());
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
+                clothDetails = new ClothDetails();
                 clothDetails.setId(id);
                 clothDetails.setLanguageID(language.getId());
                 clothDetails.setName(resultSet.getString("name"));

@@ -54,13 +54,14 @@ public class CompanyDAOImpl implements CompanyDAO {
 
 
     public Company getCompany(String companyName) throws SQLException {
-        Company company = new Company();
+        Company company = null;
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(GET_COMPANY_FROM_NAME)) {
             preparedStatement.setString(1, companyName);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
+            while (resultSet.next()) {
+                company = new Company();
                 company.setCompanyName(resultSet.getString("company_name"));
                 company.setCountry(resultSet.getString("country"));
             }
@@ -71,13 +72,14 @@ public class CompanyDAOImpl implements CompanyDAO {
     }
 
     public Company getCompany(Long id) throws SQLException {
-        Company company = new Company();
+        Company company = null;
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(GET_COMPANY_FROM_ID)) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
+            while (resultSet.next()) {
+                company = new Company();
                 company.setCompanyName(resultSet.getString("company_name"));
                 company.setCountry(resultSet.getString("country"));
             }

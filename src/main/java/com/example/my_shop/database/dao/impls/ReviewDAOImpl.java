@@ -34,7 +34,7 @@ public class ReviewDAOImpl implements ReviewDAO {
 
     @Override
     public Review getClothReviewByUser(Long userId, Long productId) throws SQLException {
-        Review review = new Review();
+        Review review = null;
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
         try(PreparedStatement preparedStatement = connection.prepareStatement(GET_CLOTH_REVIEW_BY_USER)){
@@ -42,6 +42,7 @@ public class ReviewDAOImpl implements ReviewDAO {
             preparedStatement.setLong(2, productId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
+                review = new Review();
                 review.setId(resultSet.getLong("id"));
                 review.setUserId(userId);
                 review.setProductId(productId);

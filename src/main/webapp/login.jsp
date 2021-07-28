@@ -33,14 +33,12 @@
                 <form method="POST" class="my-login-validation" action="Login">
                     <div class="form-group">
                         <label for="username"><fmt:message key="login.username"/></label>
-                        <input id="username" type="text" class="form-control" name="username" value=""
-                               autofocus>
+                        <input id="username" type="text" class="form-control" name="username" value="" autofocus required>
                     </div>
 
                     <div class="form-group">
                         <label for="password"><fmt:message key="login.password"/></label>
-                        <input id="password" type="password" class="form-control" name="password"
-                               data-eye>
+                        <input id="password" type="password" class="form-control" name="password" data-eye required>
                     </div>
 
 

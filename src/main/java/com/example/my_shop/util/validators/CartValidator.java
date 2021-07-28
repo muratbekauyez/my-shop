@@ -41,22 +41,7 @@ public class CartValidator implements Validator {
             }
         }
 
-
         return isSizeId;
-    }
-
-
-    public boolean isQuantityParameterValid(String quantity){
-        boolean isNumber = true;
-
-        for (int i = 0; i < quantity.length(); i++) {
-            if (!(quantity.charAt(i) >= MINIMUM_NUMBER_ASCII_VALUE && quantity.charAt(i) <= MAXIMUM_NUMBER_ASCII_VALUE)) {
-                isNumber = false;
-                break;
-            }
-        }
-
-        return isNumber;
     }
 
 }

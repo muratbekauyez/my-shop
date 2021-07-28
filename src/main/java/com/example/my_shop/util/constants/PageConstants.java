@@ -17,6 +17,7 @@ public class PageConstants {
     public static final String EDIT_CLOTHES_PAGE = "editClothes.jsp";
     public static final String EDIT_USERS_PAGE = "editUsers.jsp";
     public static final String EDIT_COMPANY_PAGE = "editCompanies.jsp";
+    public static final String EDIT_PASSWORD_PAGE = "editPassword.jsp";
     public static final String ERROR_PAGE = "error.jsp";
 
     public static String getClothPage() {

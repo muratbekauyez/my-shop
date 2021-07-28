@@ -100,13 +100,7 @@
                                 <c:if test="${requestScope.successProfileEdit == 'no'}">
                                     <p><a class="text-danger"><fmt:message key="profile.userUpdateError"/></a></p>
                                 </c:if>
-                                <c:if test="${requestScope.successPasswordEdit == 'yes'}">
-                                    <p><a class="text-success"><fmt:message key="profile.passwordUpdated"/></a></p>
-                                </c:if>
-                                <c:if test="${requestScope.successPasswordEdit != 'yes' && requestScope.successPasswordEdit != null}">
-                                    <p><a class="text-danger"><fmt:message
-                                            key="${requestScope.successPasswordEdit}"/> </a></p>
-                                </c:if>
+
                             </div>
                         </div>
                     </div>

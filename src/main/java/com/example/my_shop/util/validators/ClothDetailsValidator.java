@@ -20,4 +20,5 @@ public class ClothDetailsValidator implements Validator{
 
         return clothId && clothLanguageId && clothName && clothColor && numberOfPockets && clothSeason && clothPattern && clothAbout;
     }
+
 }

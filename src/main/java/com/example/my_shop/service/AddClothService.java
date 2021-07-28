@@ -5,7 +5,6 @@ import com.example.my_shop.database.dao.interfaces.ClothDAO;
 import com.example.my_shop.entity.Cloth;
 import com.example.my_shop.service.init.Service;
 import com.example.my_shop.util.validators.ClothValidator;
-import com.example.my_shop.util.validators.Validator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -17,28 +16,34 @@ import java.sql.SQLException;
 
 import static com.example.my_shop.util.constants.PageConstants.ADD_CLOTH_PAGE;
 import static com.example.my_shop.util.constants.ParameterConstants.*;
+import static com.example.my_shop.util.validators.NumberParameterValidator.isNumberParameterValid;
 
 public class AddClothService implements Service {
     private final ClothDAO clothDAO = new ClothDAOImpl();
-    private final Validator validator = new ClothValidator();
+    private final ClothValidator validator = new ClothValidator();
 
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-        if (validator.isValid(request, response)) {
+        if (!(validator.isValid(request, response) && isNumberParameterValid(request.getParameter(PRICE)))) {
+            request.setAttribute(CLOTH_ADDITION, NEGATIVE);
+        } else {
             Cloth cloth = new Cloth();
             cloth.setVendorCode(request.getParameter(CLOTH_VENDOR_CODE));
             cloth.setPrice(Integer.parseInt(request.getParameter(PRICE)));
             cloth.setCompanyId(Long.parseLong(request.getParameter(COMPANY_ID)));
             Part filePart = request.getPart(CLOTH_IMAGE);
-            InputStream fileContent = filePart.getInputStream();
-            cloth.setImage(fileContent);
-            cloth.setGenderID(Long.parseLong(request.getParameter(GENDER)));
-            clothDAO.create(cloth);
-            request.setAttribute(CLOTH_ADDITION, POSITIVE);
-        }else {
-            request.setAttribute(CLOTH_ADDITION, NEGATIVE);
+            if (!validator.isImageFileValid(filePart, request)) {
+                request.setAttribute(CLOTH_ADDITION, NEGATIVE);
+            } else {
+                InputStream fileContent = filePart.getInputStream();
+                cloth.setImage(fileContent);
+                cloth.setGenderID(Long.parseLong(request.getParameter(GENDER)));
+                clothDAO.create(cloth);
+                request.setAttribute(CLOTH_ADDITION, POSITIVE);
+            }
         }
+
         request.getRequestDispatcher(ADD_CLOTH_PAGE).forward(request, response);
     }
 }

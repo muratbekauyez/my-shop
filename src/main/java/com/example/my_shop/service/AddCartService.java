@@ -17,6 +17,7 @@ import java.sql.SQLException;
 
 import static com.example.my_shop.util.constants.PageConstants.CLOTH_PAGE;
 import static com.example.my_shop.util.constants.ParameterConstants.*;
+import static com.example.my_shop.util.validators.NumberParameterValidator.isNumberParameterValid;
 
 public class AddCartService implements Service {
     private final CartDAO cartDAO = new CartDAOImpl();
@@ -26,7 +27,7 @@ public class AddCartService implements Service {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         HttpSession session = request.getSession(true);
 
-        if(!(validator.isClothSizeParameterValid(request.getParameter(CLOTH_SIZE_ID))  && validator.isQuantityParameterValid(request.getParameter(CART_AMOUNT)))){
+        if(!(validator.isClothSizeParameterValid(request.getParameter(CLOTH_SIZE_ID))  && isNumberParameterValid(request.getParameter(CART_AMOUNT)))){
             request.setAttribute(CART_ADDITION, WRONG_CREDENTIALS);
             request.getRequestDispatcher(CLOTH_PAGE).forward(request, response);
             return;
@@ -49,7 +50,6 @@ public class AddCartService implements Service {
             cart.setProductId(cloth.getId());
             cart.setAmount(cartAmount);
             cart.setSizeId(clothSizeId);
-            System.out.println(cart);
             if(cartDAO.isProductAlreadyInCart(cart)){
                 request.setAttribute(CART_ADDITION, ALREADY_IN_CART);
             }else{

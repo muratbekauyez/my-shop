@@ -24,7 +24,9 @@ public class EditProfileService implements Service {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         HttpSession session = request.getSession(true);
-        if(validator.isValid(request, response)) {
+        if(!validator.isValid(request, response)) {
+            request.setAttribute(PROFILE_UPDATING, NEGATIVE);
+        }else {
             User user = new User();
             user.setId(Long.parseLong(request.getParameter(USER_ID)));
             user.setFirstName(request.getParameter(FIRST_NAME));
@@ -34,8 +36,6 @@ public class EditProfileService implements Service {
             userDAO.update(user);
             session.setAttribute(LOGGED_USER,userDAO.getUserById(user.getId()));
             request.setAttribute(PROFILE_UPDATING, POSITIVE);
-        }else {
-            request.setAttribute(PROFILE_UPDATING, NEGATIVE);
         }
 
 

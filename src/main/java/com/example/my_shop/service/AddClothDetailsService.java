@@ -15,6 +15,7 @@ import java.sql.SQLException;
 
 import static com.example.my_shop.util.constants.PageConstants.ADD_CLOTH_PAGE;
 import static com.example.my_shop.util.constants.ParameterConstants.*;
+import static com.example.my_shop.util.validators.NumberParameterValidator.isNumberParameterValid;
 
 public class AddClothDetailsService implements Service {
     private final ClothDetailsDAO clothDetailsDAO = new ClothDetailsDAOImpl();
@@ -22,7 +23,7 @@ public class AddClothDetailsService implements Service {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-        if (validator.isValid(request, response)) {
+        if (validator.isValid(request, response) && isNumberParameterValid(request.getParameter(CLOTH_NUMBER_OF_POCKETS))) {
             ClothDetails clothDetails = new ClothDetails();
             clothDetails.setId(Long.parseLong(request.getParameter(CLOTH_ID)));
             clothDetails.setLanguageID(Long.parseLong(request.getParameter(CLOTH_LANGUAGE_ID)));

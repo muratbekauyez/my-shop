@@ -16,6 +16,7 @@ import java.sql.SQLException;
 
 import static com.example.my_shop.util.constants.PageConstants.ADD_CLOTH_PAGE;
 import static com.example.my_shop.util.constants.ParameterConstants.*;
+import static com.example.my_shop.util.validators.NumberParameterValidator.isNumberParameterValid;
 
 public class AddClothSizeService implements Service {
     private final ClothDAO clothDAO = new ClothDAOImpl();
@@ -24,20 +25,21 @@ public class AddClothSizeService implements Service {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-        if(validator.isValid(request, response)){
-            Long clothId  = Long.parseLong(request.getParameter(CLOTH_ID));
-            Long clothSizeId = Long.parseLong(request.getParameter(CLOTH_SIZE_ID));
-            int clothAmount = Integer.parseInt(request.getParameter(CLOTH_AMOUNT));
+        Long clothId  = Long.parseLong(request.getParameter(CLOTH_ID));
+        Long clothSizeId = Long.parseLong(request.getParameter(CLOTH_SIZE_ID));
 
-            if(!sizeDAO.clothSizeExists(clothId,clothSizeId)){
-                clothDAO.addClothAmount(clothId, clothSizeId, clothAmount);
-                request.setAttribute(CLOTH_SIZE_ADDITION, POSITIVE);
-            }else {
-                request.setAttribute(CLOTH_SIZE_ADDITION, NEGATIVE);
-            }
-        }else {
+        if(!validator.isValid(request, response)){
             request.setAttribute(CLOTH_SIZE_ADDITION, NEGATIVE);
+        }else if(sizeDAO.clothSizeExists(clothId,clothSizeId)){
+            request.setAttribute(CLOTH_SIZE_ADDITION, NEGATIVE);
+        }else if(!isNumberParameterValid(request.getParameter(CLOTH_AMOUNT))){
+            request.setAttribute(CLOTH_SIZE_ADDITION, NEGATIVE);
+        }else{
+            int clothAmount = Integer.parseInt(request.getParameter(CLOTH_AMOUNT));
+            clothDAO.addClothAmount(clothId, clothSizeId, clothAmount);
+            request.setAttribute(CLOTH_SIZE_ADDITION, POSITIVE);
         }
+
         request.getRequestDispatcher(ADD_CLOTH_PAGE).forward(request,response);
     }
 }

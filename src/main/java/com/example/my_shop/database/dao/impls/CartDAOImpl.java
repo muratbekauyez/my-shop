@@ -64,7 +64,7 @@ public class CartDAOImpl implements CartDAO {
     }
 
     @Override
-    public void deleteAllOfUser(Long userId) throws SQLException {
+    public void deleteAllProductsFromCart(Long userId) throws SQLException {
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_CART)) {

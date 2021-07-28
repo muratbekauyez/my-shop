@@ -77,7 +77,6 @@ public class ClothDAOImpl implements ClothDAO {
                 cloth.setImage(resultSet.getBinaryStream("image"));
                 cloth.setImageFromDd(Base64.getEncoder().encodeToString(resultSet.getBytes("image")));
                 cloth.setGenderID(resultSet.getLong("gender_id"));
-                connectionPool.returnConnection(connection);
             }
         } finally {
             connectionPool.returnConnection(connection);
@@ -87,7 +86,7 @@ public class ClothDAOImpl implements ClothDAO {
     }
 
 
-    @Override
+
     public List<Cloth> getAllClothes() throws SQLException {
         List<Cloth> allClothes = new ArrayList<>();
         connectionPool = ConnectionPool.getInstance();

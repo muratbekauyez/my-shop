@@ -80,6 +80,8 @@ public class UserDAOImpl implements UserDAO {
                 user.setGenderId(resultSet.getLong("gender_id"));
                 allUsers.add(user);
             }
+        }finally {
+            connectionPool.returnConnection(connection);
         }
         return allUsers;
     }
@@ -134,13 +136,14 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User getUserById(Long id) throws SQLException {
-        User user = new User();
+        User user = null;
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_ID)) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
+                user = new User();
                 user.setId(id);
                 user.setUsername(resultSet.getString("username"));
                 user.setFirstName(resultSet.getString("first_name"));

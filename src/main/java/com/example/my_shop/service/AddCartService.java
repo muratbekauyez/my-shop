@@ -1,9 +1,7 @@
 package com.example.my_shop.service;
 
 import com.example.my_shop.database.dao.impls.CartDAOImpl;
-import com.example.my_shop.database.dao.impls.SizeDAOImpl;
 import com.example.my_shop.database.dao.interfaces.CartDAO;
-import com.example.my_shop.database.dao.interfaces.SizeDAO;
 import com.example.my_shop.entity.Cart;
 import com.example.my_shop.entity.Cloth;
 import com.example.my_shop.entity.User;
@@ -22,7 +20,6 @@ import static com.example.my_shop.util.constants.ParameterConstants.*;
 
 public class AddCartService implements Service {
     private final CartDAO cartDAO = new CartDAOImpl();
-    private final SizeDAO sizeDAO = new SizeDAOImpl();
     private final CartValidator validator = new CartValidator();
 
     @Override
@@ -34,27 +31,26 @@ public class AddCartService implements Service {
         User user = (User) session.getAttribute(LOGGED_USER);
         Cloth cloth = (Cloth) session.getAttribute(CLOTH);
 
-        if (validator.isValid(request, response)) {
-            if(validator.isClothAmountValid(cloth.getId(),clothSizeId, cartAmount)) {
-                Cart cart = new Cart();
-                cart.setUserId(user.getId());
-                cart.setProductId(cloth.getId());
-                cart.setAmount(cartAmount);
-                cart.setSizeId(clothSizeId);
-                if(!cartDAO.cartExists(cart)){
-                    cartDAO.create(cart);
-                    session.setAttribute(USER_CART_CLOTHES, cartDAO.getCartProducts(user.getId()));
-                    session.setAttribute(CART_SUM, cartDAO.getSumOfCart(user.getId()));
-                    request.setAttribute(CART_ADDITION, POSITIVE);
-                }else {
-                    request.setAttribute(CART_ADDITION, ALREADY_IN_CART);
-                }
-            } else{
-                request.setAttribute(CART_ADDITION, CART_ERROR);
-            }
-        } else {
+        if(!validator.isValid(request, response)){
             request.setAttribute(CART_ADDITION, BIGGER_THAN_ZERO);
+        }else if(!validator.isClothAmountValid(cloth.getId(),clothSizeId, cartAmount)){
+            request.setAttribute(CART_ADDITION, CART_ERROR);
+        }else{
+            Cart cart = new Cart();
+            cart.setUserId(user.getId());
+            cart.setProductId(cloth.getId());
+            cart.setAmount(cartAmount);
+            cart.setSizeId(clothSizeId);
+            if(cartDAO.cartExists(cart)){
+                request.setAttribute(CART_ADDITION, ALREADY_IN_CART);
+            }else{
+                cartDAO.create(cart);
+                session.setAttribute(USER_CART_CLOTHES, cartDAO.getCartProducts(user.getId()));
+                session.setAttribute(CART_SUM, cartDAO.getSumOfCart(user.getId()));
+                request.setAttribute(CART_ADDITION, POSITIVE);
+            }
         }
+
         request.getRequestDispatcher(CLOTH_PAGE).forward(request, response);
     }
 }

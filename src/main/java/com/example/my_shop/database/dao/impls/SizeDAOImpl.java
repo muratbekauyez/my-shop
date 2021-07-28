@@ -100,7 +100,6 @@ public class SizeDAOImpl implements SizeDAO {
     }
 
 
-    @Override
     public List<Size> getAllSizes() {
         List<Size> allSizes = new ArrayList<>();
         allSizes.add(new Size(1L, "S"));

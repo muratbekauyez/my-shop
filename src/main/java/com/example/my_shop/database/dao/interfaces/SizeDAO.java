@@ -14,6 +14,4 @@ public interface SizeDAO {
 
     List<Size> getAllSizesOfCloth(Long clothId) throws SQLException;
 
-    List<Size> getAllSizes();
-
 }

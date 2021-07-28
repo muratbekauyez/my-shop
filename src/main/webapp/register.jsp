@@ -28,39 +28,39 @@
         <form method="POST" class="my-login-validation" action="Register">
           <div class="form-group">
             <label for="username"><fmt:message key="register.username"/></label>
-            <input id="username" type="text" class="form-control" name="username" autofocus>
+            <input id="username" type="text" class="form-control" name="username" autofocus required>
           </div>
 
           <div class="form-group">
             <label for="password"><fmt:message key="register.password"/></label>
-            <input id="password" type="password" class="form-control" name="password"  data-eye>
+            <input id="password" type="password" class="form-control" name="password"  data-eye required>
           </div>
 
           <div class="form-group">
             <label for="re-password"><fmt:message key="register.re-password"/></label>
-            <input id="re-password" type="password" class="form-control" name="re-password"  data-eye>
+            <input id="re-password" type="password" class="form-control" name="re-password"  data-eye required>
           </div>
 
           <div class="form-group">
             <label for="firstName"><fmt:message key="register.firstName"/></label>
-            <input id="firstName" type="text" class="form-control" name="firstName"  autofocus>
+            <input id="firstName" type="text" class="form-control" name="firstName"  autofocus required>
           </div>
 
           <div class="form-group">
             <label for="lastName"><fmt:message key="register.lastName"/></label>
-            <input id="lastName" type="text" class="form-control" name="lastName"  autofocus>
+            <input id="lastName" type="text" class="form-control" name="lastName"  autofocus required>
           </div>
 
           <div class="form-group">
             <label for="birthDate"><fmt:message key="register.birthDate"/></label>
-            <input id="birthDate" type="date" class="form-control" name="birthDate"  autofocus>
+            <input id="birthDate" type="date" class="form-control" name="birthDate"  autofocus required>
           </div>
 
           <div class="form-group">
             <label for="male"><fmt:message key="register.male"/></label>
-            <input id="male" type="radio" class="form-control" name="gender" value="1"  autofocus>
+            <input id="male" type="radio" class="form-control" name="gender" value="1"  autofocus required>
             <label for="female"><fmt:message key="register.female"/></label>
-            <input id="female" type="radio" class="form-control" name="gender" value="2"  autofocus>
+            <input id="female" type="radio" class="form-control" name="gender" value="2"  autofocus required>
           </div>
 
           <div class="form-group m-0">

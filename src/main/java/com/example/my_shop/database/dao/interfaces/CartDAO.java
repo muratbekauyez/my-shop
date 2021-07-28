@@ -18,5 +18,5 @@ public interface CartDAO {
 
     int getSumOfCart(Long userId) throws SQLException;
 
-    void deleteAllOfUser (Long userId) throws SQLException;
+    void deleteAllProductsFromCart(Long userId) throws SQLException;
 }

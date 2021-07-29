@@ -13,8 +13,8 @@ public class ClothValidator implements Validator{
         boolean vendorCode = request.getParameter(CLOTH_VENDOR_CODE) != null && !request.getParameter(CLOTH_VENDOR_CODE).equals("");
         boolean price = request.getParameter(PRICE) != null && !request.getParameter(PRICE).equals("");
         boolean companyId = request.getParameter(COMPANY_ID) != null && !request.getParameter(COMPANY_ID).equals("");
-
-        return vendorCode && price && companyId;
+        boolean priceBiggerZero = Integer.parseInt(request.getParameter(PRICE)) > 0;
+        return vendorCode && price && companyId && priceBiggerZero;
 
     }
 

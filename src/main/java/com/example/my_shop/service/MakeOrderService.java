@@ -51,7 +51,7 @@ public class MakeOrderService implements Service {
         Order order = new Order();
         order.setDate(java.sql.Date.valueOf(LocalDate.now()));
         order.setTotalPrice(Integer.parseInt(request.getParameter(TOTAL_PRICE)));
-        order.setStatusId(1L);
+        order.setStatusId(INITIAL_STATUS_ID);
         order.setUserId(user.getId());
 
         orderId = orderDAO.create(order);

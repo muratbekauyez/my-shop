@@ -138,12 +138,7 @@
                                             <th scope="row"><button type="submit" name="orderId" value="${userOrder.id}" class="btn btn-link">${userOrder.id}</button></th>
                                             <td>${userOrder.date}</td>
                                             <td>₸${userOrder.totalPrice}</td>
-                                            <c:if test="${sessionScope.webLanguageId == 1}">
-                                                <td>${orderDao.statusName(userOrder.statusId)}</td>
-                                            </c:if>
-                                            <c:if test="${sessionScope.webLanguageId == 2}">
-                                                <td>${orderDao.statusName(userOrder.statusId+1)}</td>
-                                            </c:if>
+                                            <td>${orderDao.getStatusName(userOrder.statusId, sessionScope.webLanguageId)}</td>
                                         </tr>
                                     </form>
                                 </c:forEach>

@@ -8,9 +8,7 @@ import com.example.my_shop.entity.OrderDetails;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class OrderDAOImpl implements OrderDAO {
     private static final String ADD_ORDER = "INSERT INTO \"Order\" (date, total_price, status_id, user_id) VALUES (?,?,?,?) RETURNING id";
@@ -18,6 +16,7 @@ public class OrderDAOImpl implements OrderDAO {
     private static final String REDUCE_AMOUNT = "UPDATE \"Cloth_Size\" SET amount = ? WHERE cloth_id = ? AND size_id = ?";
     private static final String GET_USER_ORDERS = "SELECT id, date, total_price, status_id FROM \"Order\" WHERE user_id = ?";
     private static final String GET_ORDER_DETAILS = "SELECT id,product_id, size_id, amount, product_price FROM \"Order_Details\" WHERE order_id = ?";
+    private static final String GET_STATUS_NAME = "SELECT status_name FROM \"Status_Name\" WHERE status_id = ? AND language_id = ?";
 
     private ConnectionPool connectionPool;
     private Connection connection;
@@ -127,16 +126,24 @@ public class OrderDAOImpl implements OrderDAO {
         return orderDetailsList;
     }
 
-    public String statusName(Long statusId) {
-        Map<Long, String> statuses = new HashMap<>();
-        statuses.put(1L, "Processing");
-        statuses.put(2L, "Обрабатывается");
-        statuses.put(3L, "Delivering");
-        statuses.put(4L, "Доставляется");
-        statuses.put(5L, "Delivered");
-        statuses.put(6L, "Доставлен");
 
-        return statuses.get(statusId);
+    public String getStatusName(Long statusId, Long languageId) throws SQLException{
+        String statusName = null;
+        connectionPool = ConnectionPool.getInstance();
+        connection = connectionPool.takeConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_STATUS_NAME)) {
+            preparedStatement.setLong(1, statusId);
+            preparedStatement.setLong(2, languageId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                statusName = resultSet.getString("status_name");
+            }
+        } finally {
+            connectionPool.returnConnection(connection);
+        }
+
+        return statusName;
     }
+
 
 }

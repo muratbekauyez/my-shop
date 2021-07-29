@@ -8,6 +8,7 @@ public class ParameterConstants {
     public static final String WEB_LANGUAGE_NAME = "webLanguageName";
     public static final Long ENG_LANG_ID = 1L;
     public static final Long RUS_LANG_ID = 2L;
+    public static final Long INITIAL_STATUS_ID = 1L;
     public static final String ENGLISH = "en";
     public static final String RUSSIAN = "ru";
     public static final String USERNAME = "username";

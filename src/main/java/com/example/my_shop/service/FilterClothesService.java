@@ -1,5 +1,6 @@
 package com.example.my_shop.service;
 
+import com.example.my_shop.database.dao.factory.ClothFactory;
 import com.example.my_shop.database.dao.impls.ClothDAOImpl;
 import com.example.my_shop.database.dao.interfaces.ClothDAO;
 import com.example.my_shop.entity.Cloth;
@@ -18,21 +19,23 @@ import static com.example.my_shop.util.constants.ParameterConstants.*;
 
 public class FilterClothesService implements Service {
     private final ClothDAO clothDAO = new ClothDAOImpl();
+    private final ClothFactory clothFactory = new ClothFactory();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         HttpSession session = request.getSession(true);
         List<Cloth> clothes;
+
         String[] sizeIds = request.getParameterValues(CLOTH_SIZE_ID);
         String[] companyIds = request.getParameterValues(COMPANY_ID);
 
         if(sizeIds != null && companyIds != null){
-            clothes = clothDAO.filterClothes(sizeIds, companyIds);
+            clothes = clothFactory.filterClothesByCompaniesAndSizes(sizeIds,companyIds);
         }
         else if(sizeIds != null){
-            clothes = clothDAO.filterClothes(sizeIds, new String[]{});
+            clothes = clothFactory.filterClothesByMultipleSizes(sizeIds);
         }else if(companyIds != null){
-            clothes = clothDAO.filterClothes(new String[]{},companyIds);
+            clothes = clothFactory.filterClothesByMultipleCompanies(companyIds);
         }else{
             clothes = clothDAO.getAvailableClothes();
             session.setAttribute(FILTERED_CLOTHES, clothes);

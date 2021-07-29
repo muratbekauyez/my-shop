@@ -15,10 +15,14 @@ public interface ClothDAO {
 
     void addClothAmount(Long clothId, Long sizeId, int amount) throws SQLException;
 
-    List<Cloth> filterClothes(String[] sizeIds,String[] companyIds)throws SQLException;
 
     List<Cloth> getAvailableClothes() throws SQLException;
 
     void setAmountToZero(Long id) throws SQLException;
+
+    List<Cloth> filterClothesWithSize (String sizeId) throws SQLException;
+
+    List<Cloth> filterClothesWithCompany (String companyId) throws SQLException;
+
 
 }

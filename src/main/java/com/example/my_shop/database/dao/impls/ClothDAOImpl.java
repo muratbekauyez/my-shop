@@ -1,18 +1,24 @@
 package com.example.my_shop.database.dao.impls;
 
 import com.example.my_shop.database.connection.ConnectionPool;
-import com.example.my_shop.database.dao.factory.ClothFactory;
 import com.example.my_shop.database.dao.interfaces.ClothDAO;
 import com.example.my_shop.entity.Cloth;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
 
 public class ClothDAOImpl implements ClothDAO {
     private static final String ADD_CLOTH = "INSERT INTO \"Clothes\" (vendor_code, price, company_id, image, gender_id) VALUES (?,?,?,?,?)";
     private static final String UPDATE_CLOTH = "UPDATE \"Clothes\" SET vendor_code = ?, price = ?, company_id = ?, image = ?, gender_id = ? WHERE id=?";
     private static final String GET_CLOTH = "SELECT vendor_code, price, company_id, image, gender_id FROM \"Clothes\" WHERE id = ?";
     private static final String GET_CLOTHES = "SELECT id,vendor_code, company_id, price, image, gender_id FROM \"Clothes\" ORDER BY id";
+    private static final String GET_FILTERED_CLOTHES_BY_SIZE = "SELECT * FROM \"Clothes\" C JOIN \"Cloth_Size\" CS on C.id = CS.cloth_id WHERE CS.size_id = ? AND amount > 0";
+    private static final String GET_FILTERED_CLOTHES_BY_COMPANY = "SELECT * FROM \"Clothes\" C JOIN \"Cloth_Size\" CS on C.id = CS.cloth_id WHERE C.company_id = ? AND amount > 0";
     private static final String GET_AVAILABLE_CLOTHES = "SELECT DISTINCT id, vendor_code, image, price, company_id, gender_id FROM \"Clothes\" C JOIN \"Cloth_Size\" CS on C.id = CS.cloth_id WHERE amount > 0 ";
     private static final String ADD_CLOTH_SIZE = "INSERT INTO \"Cloth_Size\" (cloth_id, size_id, amount) VALUES (?,?,?)";
     private static final String SET_0_CLOTH_SIZE = "UPDATE \"Cloth_Size\" SET amount = 0 WHERE cloth_id=?";
@@ -136,15 +142,16 @@ public class ClothDAOImpl implements ClothDAO {
         return availableClothes;
     }
 
+
     @Override
-    public List<Cloth> filterClothes(String[] sizeIds, String[] companyIds) throws SQLException {
+    public List<Cloth> filterClothesWithSize (String sizeId) throws SQLException{
         List<Cloth> filteredClothes = new ArrayList<>();
         connectionPool = ConnectionPool.getInstance();
         connection = connectionPool.takeConnection();
-        String GET_AVAILABLE_CLOTHES = new ClothFactory().prepareQueryForFilter(sizeIds, companyIds);
-        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_AVAILABLE_CLOTHES)) {
+        try(PreparedStatement preparedStatement = connection.prepareStatement(GET_FILTERED_CLOTHES_BY_SIZE)){
+            preparedStatement.setLong(1, Long.parseLong(sizeId));
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
+            while (resultSet.next()){
                 Cloth cloth = new Cloth();
                 cloth.setId(resultSet.getLong("id"));
                 cloth.setVendorCode(resultSet.getString("vendor_code"));
@@ -157,12 +164,45 @@ public class ClothDAOImpl implements ClothDAO {
                     filteredClothes.add(cloth);
                 }
             }
-        } finally {
+
+        }finally {
             connectionPool.returnConnection(connection);
         }
 
         return filteredClothes;
     }
+
+    @Override
+    public List<Cloth> filterClothesWithCompany (String companyId) throws SQLException{
+        List<Cloth> filteredClothes = new ArrayList<>();
+        connectionPool = ConnectionPool.getInstance();
+        connection = connectionPool.takeConnection();
+        try(PreparedStatement preparedStatement = connection.prepareStatement(GET_FILTERED_CLOTHES_BY_COMPANY)){
+            preparedStatement.setLong(1, Long.parseLong(companyId));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                Cloth cloth = new Cloth();
+                cloth.setId(resultSet.getLong("id"));
+                cloth.setVendorCode(resultSet.getString("vendor_code"));
+                cloth.setPrice(resultSet.getInt("price"));
+                cloth.setImage(resultSet.getBinaryStream("image"));
+                cloth.setCompanyId(resultSet.getLong("company_id"));
+                cloth.setImageFromDd(Base64.getEncoder().encodeToString(resultSet.getBytes("image")));
+                cloth.setGenderID(resultSet.getLong("gender_id"));
+                if (!filteredClothes.contains(cloth)) {
+                    filteredClothes.add(cloth);
+                }
+            }
+
+        }finally {
+            connectionPool.returnConnection(connection);
+        }
+
+        return filteredClothes;
+    }
+
+
+
 
 
     @Override

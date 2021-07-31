@@ -38,7 +38,8 @@
 
                     <div class="form-group">
                         <label for="password"><fmt:message key="login.password"/></label>
-                        <input id="password" type="password" class="form-control" name="password" data-eye required>
+                        <input id="password" type="password" class="form-control" name="password" data-eye required/>
+                        <i class="fa fa-eye" id="togglePassword" style="cursor: pointer;"></i>
                     </div>
 
 
@@ -58,5 +59,17 @@
         </div>
     </div>
 </div>
+<script>
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#password');
+
+    togglePassword.addEventListener('click', function (e) {
+        // toggle the type attribute
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        // toggle the eye slash icon
+        this.classList.toggle('fa-eye-slash');
+    });
+</script>
 </body>
 </html>

@@ -29,6 +29,7 @@ public class ServiceFactory {
         SERVICE_MAP.put(GET_CLOTH_PAGE_SERVICE, new GetClothPageService());
         SERVICE_MAP.put(ADD_REVIEW_SERVICE, new AddReviewService());
         SERVICE_MAP.put(EDIT_REVIEW_SERVICE, new EditReviewService());
+        SERVICE_MAP.put(DELETE_REVIEW_SERVICE, new DeleteReviewService());
         SERVICE_MAP.put(ADD_TO_CART_SERVICE, new AddCartService());
         SERVICE_MAP.put(EDIT_CART_CLOTH_AMOUNT_SERVICE, new EditCartClothAmountService());
         SERVICE_MAP.put(DELETE_CART_SERVICE, new DeleteCartService());

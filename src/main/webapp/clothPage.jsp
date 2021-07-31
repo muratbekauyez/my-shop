@@ -114,7 +114,7 @@
                                     <textarea class="form-control" name="reviewContent"></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <input type="submit" class="btn btn-primary btn-sm" value="Add Review">
+                                    <input type="submit" class="btn btn-primary btn-sm" value="<fmt:message key="clothPage.addReview"/>">
                                 </div>
                             </form>
                         </c:if>
@@ -125,8 +125,11 @@
                                     <textarea class="form-control" name="reviewContent"></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <input type="submit" class="btn btn-primary btn-sm" value="Edit Review">
+                                    <input type="submit" class="btn btn-primary btn-sm" value="<fmt:message key="clothPage.editReview"/>">
                                 </div>
+                            </form>
+                            <form action="DeleteReview" method="POST">
+                                <input type="submit" class="btn btn-danger btn-sm" value="<fmt:message key="clothPage.deleteReview"/>">
                             </form>
                         </c:if>
                     </div>

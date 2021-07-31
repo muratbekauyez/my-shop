@@ -13,6 +13,7 @@ public class ReviewDAOImpl implements ReviewDAO {
     private static final String GET_CLOTH_REVIEW_BY_USER = "SELECT id, content, date FROM \"Review\" WHERE user_id = ? AND product_id = ?";
     private static final String GET_CLOTH_REVIEWS = "SELECT id, user_id, content, date FROM \"Review\" WHERE product_id = ?";
     private static final String UPDATE_REVIEW = "UPDATE \"Review\" SET content=?, date = ? WHERE user_id = ? AND product_id = ?";
+    private static final String DELETE_REVIEW = "DELETE FROM \"Review\" WHERE user_id = ? AND product_id = ?";
 
     private ConnectionPool connectionPool;
     private Connection connection;
@@ -88,6 +89,19 @@ public class ReviewDAOImpl implements ReviewDAO {
             preparedStatement.setDate(2,(Date) review.getDate());
             preparedStatement.setLong(3,review.getUserId());
             preparedStatement.setLong(4,review.getProductId());
+            preparedStatement.executeUpdate();
+        }finally {
+            connectionPool.returnConnection(connection);
+        }
+    }
+
+    @Override
+    public void deleteReview(Review review) throws SQLException {
+        connectionPool = ConnectionPool.getInstance();
+        connection = connectionPool.takeConnection();
+        try(PreparedStatement preparedStatement = connection.prepareStatement(DELETE_REVIEW)){
+            preparedStatement.setLong(1, review.getUserId());
+            preparedStatement.setLong(2, review.getProductId());
             preparedStatement.executeUpdate();
         }finally {
             connectionPool.returnConnection(connection);

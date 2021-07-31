@@ -43,7 +43,13 @@ public class LoginService implements Service {
 
         }else{
             session.setAttribute(LOGGED_USER, user);
-            session.setAttribute(USER_CART_CLOTHES, cartDAO.getCartProducts(user.getId()));
+
+            if(cartDAO.getCartProducts(user.getId()).size() > 0){
+                session.setAttribute(USER_CART_CLOTHES, cartDAO.getCartProducts(user.getId()));
+            }else{
+                session.setAttribute(USER_CART_CLOTHES, null);
+            }
+
             session.setAttribute(CART_SUM, cartDAO.getSumOfCart(user.getId()));
             session.setAttribute(USER_ORDERS, orderDAO.getUserOrders(user.getId()));
             request.getRequestDispatcher(PROFILE_PAGE).forward(request, response);

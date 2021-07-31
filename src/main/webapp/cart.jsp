@@ -24,8 +24,8 @@
     <jsp:include page="${pageConstants.headerPage}"/>
 </c:if>
 
-
-<c:if test="${sessionScope.userCartClothes.size() != 0 or sessionScope.userCartClothes == null}">
+<c:if test="${sessionScope.userCartClothes != null }">
+    ${sessionScope.userCartClothes.size()}
     <div class="cart-box">
         <div class="order_summary">
             <div class="summary_card">
@@ -55,7 +55,8 @@
                             <div class="product_info">
                                 <div class="product_rate_info">
                                     <input type="hidden" name="clothId" value="${cartCloth.productId}">
-                                    <button type="submit" class="btn btn-danger"><fmt:message key="cart.delete"/></button>
+                                    <button type="submit" class="btn btn-danger"><fmt:message
+                                            key="cart.delete"/></button>
                                 </div>
                             </div>
                         </form>
@@ -66,6 +67,7 @@
                     <p><a class="text-danger"><fmt:message key="cart.updateError"/></a></p>
                 </c:if>
                 <hr/>
+
                 <form action="MakeOrder" method="POST">
                     <div class="order_total">
                         <p><fmt:message key="cart.totalAmount"/></p>
@@ -74,6 +76,7 @@
                         <button type="submit" class="btn btn-success"><fmt:message key="cart.buy"/></button>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>

@@ -17,8 +17,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-import static com.example.my_shop.util.constants.PageConstants.CLOTH_PAGE;
-import static com.example.my_shop.util.constants.PageConstants.LOGIN_PAGE;
+import static com.example.my_shop.util.constants.PageConstants.*;
 import static com.example.my_shop.util.constants.ParameterConstants.*;
 
 public class GetClothPageService implements Service {
@@ -31,11 +30,15 @@ public class GetClothPageService implements Service {
         if(session.getAttribute(LOGGED_USER) != null){
             Language language = new Language();
 
-
             User user = (User)session.getAttribute(LOGGED_USER);
             Long clothId = Long.parseLong(request.getParameter(CLOTH_ID));
             language.setId((Long)session.getAttribute(WEB_LANGUAGE_ID));
             language.setLanguageName((String) session.getAttribute(WEB_LANGUAGE_NAME));
+
+            if(clothDAO.getCloth(clothId) == null){
+                request.getRequestDispatcher(ERROR_PAGE).forward(request, response);
+                return;
+            }
 
             Cloth cloth = clothDAO.getCloth(clothId);
             ClothDetails clothDetails = clothDetailsDAO.getClothDetails(cloth.getId(),language);

@@ -16,6 +16,7 @@ public class ServiceConstants {
     public static final String GET_CLOTH_PAGE_SERVICE = "/GetClothPage";
     public static final String ADD_REVIEW_SERVICE = "/AddReview";
     public static final String EDIT_REVIEW_SERVICE = "/EditReview";
+    public static final String DELETE_REVIEW_SERVICE = "/DeleteReview";
     public static final String ADD_TO_CART_SERVICE = "/AddCart";
     public static final String EDIT_CART_CLOTH_AMOUNT_SERVICE = "/EditCartClothAmount";
     public static final String DELETE_CART_SERVICE = "/DeleteCart";

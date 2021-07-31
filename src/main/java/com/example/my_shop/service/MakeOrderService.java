@@ -32,12 +32,14 @@ public class MakeOrderService implements Service {
     private final ClothDAO clothDAO = new ClothDAOImpl();
     private final OrderDAO orderDAO = new OrderDAOImpl();
     private final SizeDAO sizeDAO = new SizeDAOImpl();
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         Long orderId;
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(LOGGED_USER);
         List<Cart> userCartClothes = cartDAO.getCartProducts(user.getId());
+
 
 
         for (Cart cartCloth: userCartClothes) {

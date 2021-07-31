@@ -15,4 +15,6 @@ public interface ReviewDAO {
 
     void updateReview (Review review) throws SQLException;
 
+    void deleteReview (Review review) throws SQLException;
+
 }

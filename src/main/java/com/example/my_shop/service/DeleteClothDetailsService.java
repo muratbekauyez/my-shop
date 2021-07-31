@@ -20,7 +20,9 @@ public class DeleteClothDetailsService implements Service {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         Long clothDetailsId = Long.parseLong(request.getParameter(CLOTH_ID));
         Long languageId = Long.parseLong(request.getParameter(CLOTH_LANGUAGE_ID));
+
         clothDetailsDAO.delete(clothDetailsId, languageId);
+
         request.setAttribute(CLOTH_DETAILS_DELETION, POSITIVE);
         request.getRequestDispatcher(EDIT_CLOTHES_PAGE).forward(request, response);
     }

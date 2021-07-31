@@ -29,7 +29,8 @@ public class AddReviewService implements Service {
         User user = (User) session.getAttribute(LOGGED_USER);
         Cloth cloth = (Cloth) session.getAttribute(CLOTH);
 
-        if (request.getParameter(REVIEW_CONTENT) != null && !request.getParameter(REVIEW_CONTENT).equals("")) {
+        if (request.getParameter(REVIEW_CONTENT) != null &&
+                !request.getParameter(REVIEW_CONTENT).equals("")) {
             Review review = new Review();
             review.setUserId(user.getId());
             review.setProductId(cloth.getId());

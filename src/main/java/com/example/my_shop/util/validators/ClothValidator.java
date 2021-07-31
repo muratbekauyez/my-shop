@@ -21,7 +21,7 @@ public class ClothValidator implements Validator{
     public boolean isImageFileValid(Part filePart, HttpServletRequest request) {
         String fileName = filePart.getSubmittedFileName();
         String mimiType = request.getServletContext().getMimeType(fileName);
-        return mimiType.startsWith("image/");
+        return mimiType.startsWith(IMAGE_FILETYPE);
     }
 
 }

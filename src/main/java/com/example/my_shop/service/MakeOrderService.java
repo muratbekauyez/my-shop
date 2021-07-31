@@ -35,12 +35,11 @@ public class MakeOrderService implements Service {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-        Long orderId;
         HttpSession session = request.getSession(true);
+
+        Long orderId;
         User user = (User) session.getAttribute(LOGGED_USER);
         List<Cart> userCartClothes = cartDAO.getCartProducts(user.getId());
-
-
 
         for (Cart cartCloth: userCartClothes) {
             if(cartCloth.getAmount() > sizeDAO.getClothAmount(cartCloth.getProductId(), cartCloth.getSizeId())){
@@ -55,10 +54,9 @@ public class MakeOrderService implements Service {
         order.setTotalPrice(Integer.parseInt(request.getParameter(TOTAL_PRICE)));
         order.setStatusId(INITIAL_STATUS_ID);
         order.setUserId(user.getId());
-
         orderId = orderDAO.create(order);
-        List<OrderDetails> orderDetailsList = new ArrayList<>();
 
+        List<OrderDetails> orderDetailsList = new ArrayList<>();
         for (Cart cart : userCartClothes){
             OrderDetails orderDetails = new OrderDetails();
             orderDetails.setOrderId(orderId);
@@ -79,7 +77,5 @@ public class MakeOrderService implements Service {
         request.setAttribute(ORDER_COMPLETION, POSITIVE);
 
         request.getRequestDispatcher(PROFILE_PAGE).forward(request,response);
-
-
     }
 }

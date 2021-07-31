@@ -15,6 +15,7 @@ public class SizeDAOImpl implements SizeDAO {
     private static final String GET_SIZE_NAME = "SELECT size_name FROM \"Size\" WHERE id = ?";
     private static final String CHECK_CLOTH_SIZE = "SELECT * FROM \"Cloth_Size\" WHERE cloth_id = ? AND size_id = ?";
     private static final String GET_SIZES_OF_CLOTH = "SELECT size_id, amount, S.size_name  FROM \"Cloth_Size\" CS JOIN \"Size\" S on S.id = CS.size_id WHERE CS.cloth_id = ?";
+    private static final String GET_SIZES = "SELECT * FROM \"Size\"";
 
 
     private ConnectionPool connectionPool;
@@ -29,10 +30,10 @@ public class SizeDAOImpl implements SizeDAO {
         try (PreparedStatement preparedStatement = connection.prepareStatement(GET_SIZE_NAME)) {
             preparedStatement.setLong(1, sizeId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 sizeName = resultSet.getString("size_name");
             }
-        }finally {
+        } finally {
             connectionPool.returnConnection(connection);
         }
         return sizeName;
@@ -49,11 +50,11 @@ public class SizeDAOImpl implements SizeDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 int amount = resultSet.getInt("amount");
-                if(amount > 0) {
-                    clothSizeExists =  true;
+                if (amount > 0) {
+                    clothSizeExists = true;
                 }
             }
-        }finally {
+        } finally {
             connectionPool.returnConnection(connection);
         }
         return clothSizeExists;
@@ -71,7 +72,7 @@ public class SizeDAOImpl implements SizeDAO {
             while (resultSet.next()) {
                 amount = resultSet.getInt("amount");
             }
-        }finally {
+        } finally {
             connectionPool.returnConnection(connection);
         }
         return amount;
@@ -89,23 +90,32 @@ public class SizeDAOImpl implements SizeDAO {
                 Size size = new Size();
                 size.setId(resultSet.getLong("size_id"));
                 size.setSizeName(resultSet.getString("size_name"));
-                if(resultSet.getInt("amount") > 0){
+                if (resultSet.getInt("amount") > 0) {
                     allSizesOfCloth.add(size);
                 }
             }
-        }finally {
+        } finally {
             connectionPool.returnConnection(connection);
         }
         return allSizesOfCloth;
     }
 
 
-    public List<Size> getAllSizes() {
+    public List<Size> getAllSizes() throws SQLException {
         List<Size> allSizes = new ArrayList<>();
-        allSizes.add(new Size(1L, "S"));
-        allSizes.add(new Size(2L, "M"));
-        allSizes.add(new Size(3L, "L"));
-        allSizes.add(new Size(4L, "XL"));
+        connectionPool = ConnectionPool.getInstance();
+        connection = connectionPool.takeConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(GET_SIZES)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Size size = new Size();
+                size.setId(resultSet.getLong("id"));
+                size.setSizeName(resultSet.getString("size_name"));
+                allSizes.add(size);
+            }
+        } finally {
+            connectionPool.returnConnection(connection);
+        }
         return allSizes;
     }
 }

@@ -45,7 +45,6 @@ public class EditProfileService implements Service {
         }
         if (request.getParameter(PAGE_NAME).equals(EDIT_USERS_PAGE)) {
             request.getRequestDispatcher(EDIT_USERS_PAGE).forward(request, response);
-
         }
 
     }

@@ -22,14 +22,18 @@ public class DeleteCartService implements Service {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         HttpSession session = request.getSession(true);
+
         User user = (User) session.getAttribute(LOGGED_USER);
+
         Long clothId = Long.parseLong(request.getParameter(CLOTH_ID));
         Cart cart = new Cart();
         cart.setUserId(user.getId());
         cart.setProductId(clothId);
         cartDAO.delete(cart);
+
         session.setAttribute(USER_CART_CLOTHES, cartDAO.getCartProducts(user.getId()));
         session.setAttribute(CART_SUM, cartDAO.getSumOfCart(user.getId()));
+
         request.getRequestDispatcher(PROFILE_PAGE).forward(request,response);
     }
 }

@@ -15,7 +15,6 @@ public interface ClothDAO {
 
     void addClothAmount(Long clothId, Long sizeId, int amount) throws SQLException;
 
-
     List<Cloth> getAvailableClothes() throws SQLException;
 
     void setAmountToZero(Long id) throws SQLException;

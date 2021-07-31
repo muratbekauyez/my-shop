@@ -27,7 +27,7 @@ public class CartValidator implements Validator {
         return clothSizeExists && isClothAmountEnough;
     }
 
-    public boolean isClothSizeParameterValid(String clothSizeId) {
+    public boolean isClothSizeParameterValid(String clothSizeId) throws SQLException {
         boolean isSizeId = false;
 
         if (clothSizeId.length() == 1) {

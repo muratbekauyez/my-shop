@@ -19,10 +19,13 @@ public class ChangeLanguageService implements Service {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         HttpSession session = request.getSession(true);
+
         Long languageId = Long.parseLong(request.getParameter(LANGUAGE_TO_CHANGE));
         String languageName = languageDAO.getLanguageName(languageId);
+
         session.setAttribute(WEB_LANGUAGE_ID, languageId);
         session.setAttribute(WEB_LANGUAGE_NAME, languageName);
+
         request.getRequestDispatcher(request.getParameter(PAGE_PATH)).forward(request,response);
     }
 }

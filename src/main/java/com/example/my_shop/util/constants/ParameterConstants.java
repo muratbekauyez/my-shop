@@ -84,6 +84,7 @@ public class ParameterConstants {
     public static final String CLOTH_DETAILS_DELETION = "deleteClothDetails";
     public static final int MINIMUM_NUMBER_ASCII_VALUE = 48;
     public static final int MAXIMUM_NUMBER_ASCII_VALUE = 57;
+    public static final String IMAGE_FILETYPE = "image/";
 
 
     public Long getAdminRoleId() {
